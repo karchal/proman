@@ -29,9 +29,29 @@ function boardBuilder(board) {
                         <i class="fas fa-chevron-down"></i>
                    </button>
                 </div>
+                <div class="board-columns">
+                    <div class="board-column">
+                        <div class="board-column-title">New</div>
+                        <div class="board-column-content"></div>
+                    </div>
+                    <div class="board-column">
+                        <div class="board-column-title">In Progress</div>
+                        <div class="board-column-content"></div>
+                    </div>
+                    <div class="board-column">
+                        <div class="board-column-title">Testing</div>
+                        <div class="board-column-content"></div>
+                    </div>
+                    <div class="board-column">
+                        <div class="board-column-title">Done</div>
+                        <div class="board-column-content"></div>
+                    </div>
+                </div>
             </section>`
 }
 
 function cardBuilder(card) {
-    return `<div class="card" data-card-id="${card.id}">${card.title}</div>;`
+    return `<div class="card" data-card-id="${card.id}">
+                ${card.title}
+            </div>;`
 }
