@@ -17,8 +17,7 @@ def index():
     """
     This is a one-pager which shows all the boards and cards
     """
-    #boards = queries.get_boards();
-    return render_template('index.html')#, boards=boards)
+    return render_template('index.html', user=queries.get_user_by_username(session.get('username')))
 
 
 @app.route("/api/boards")

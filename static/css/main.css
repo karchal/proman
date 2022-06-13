@@ -133,4 +133,7 @@ section.board{
     padding-right: 16px;
 }
 
-
+.navbar {
+    display: flex;
+    justify-content: center;
+}
