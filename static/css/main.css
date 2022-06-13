@@ -1,3 +1,62 @@
 #boards {
     background-color: green;
 }
+
+:root{
+    --border-radius: 3px;
+    --status-1: #590000;
+    --status-2: #594300;
+    --status-3: #525900;
+    --status-4: #085900;
+}
+
+body{
+    min-width: 620px;
+    background: #ddd url(http://cdn.backgroundhost.com/backgrounds/subtlepatterns/diagonal-noise.png);
+    font-family: sans-serif;
+}
+
+h1, .board-title, .board-column-title{
+    font-weight: 100;
+}
+
+h1{
+    text-align: center;
+    font-size: 4em;
+    letter-spacing: 5px;
+    transform: scale(1.2, 1);
+}
+
+button{
+    background: #222;
+    color: #fff;
+    border: none;
+    font-size: 14px;
+    font-family: sans-serif;
+    padding: 4px 10px;
+}
+
+.board-container{
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+section.board{
+    margin: 20px;
+    border: aliceblue;
+    background: #ffffff90;
+    border-radius: 3px;
+}
+
+.board-header{
+    height: 50px;
+    background: #fff;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+.board-title{
+    margin: 13px;
+    display: inline-block;
+    font-size: 20px;
+}
+

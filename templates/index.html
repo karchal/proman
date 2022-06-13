@@ -19,19 +19,11 @@
         <script type="module" src="{{ url_for('static', filename='js/main.js') }}" defer></script>
     </head>
     <body>
-        <div id="root"></div>
 
         <h1>ProMan</h1>
 
-        <div class="board-container">
-            {% for board in boards %}
-            <section class="board">
-                <div class="board-header">
-                    <span class="board-title">{{ board["title"] }}</span>
-                </div>
-            </section>
-            {% endfor %}
-        </div>
+        <div class="board-container"></div>
 
     </body>
+
 </html>
