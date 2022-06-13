@@ -16,5 +16,8 @@
     </head>
     <body>
         <div id="root"></div>
+        <form action="{{ url_for('post_logout') }}" method="post">
+            <button type="submit">LOGOUT</button>
+        </form>
     </body>
 </html>

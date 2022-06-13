@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import jsonify
+from flask import jsonify, session
 
 
 def json_response(func):
@@ -13,3 +13,7 @@ def json_response(func):
         return jsonify(func(*args, **kwargs))
 
     return decorated_function
+
+
+def user_logged_in():
+    return 'username' in session

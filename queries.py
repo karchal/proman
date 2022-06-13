@@ -43,3 +43,34 @@ def get_cards_for_board(board_id):
         , {"board_id": board_id})
 
     return matching_cards
+
+
+def get_user_by_username(username):
+    user = data_manager.execute_select(
+        """
+        SELECT * FROM users
+        WHERE username = %(username)s
+        """
+        , {'username': username}, fetchall=False)
+
+    return user
+
+
+def get_user_by_user_id(user_id):
+    user = data_manager.execute_select(
+        """
+        SELECT * FROM users
+        WHERE id = %(user_id)s
+        """
+        , {'user_id': user_id}, fetchall=False)
+
+    return user
+
+
+def add_new_user(new_user):
+    data_manager.execute_insert(
+        """
+        INSERT INTO users(username, password)
+        VALUES(%(username)s, %(password)s)
+        """
+        , {'username': new_user['username'], 'password': new_user['password']})
