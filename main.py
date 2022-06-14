@@ -108,6 +108,13 @@ def get_status(status_id):
     return queries.get_card_status(status_id)
 
 
+@app.route("/api/boards", methods=["POST"])
+@json_response
+def post_new_board():
+    data = request.get_json()
+    queries.add_new_board(data['boardTitle'])
+
+
 def main():
     app.run(debug=True)
 

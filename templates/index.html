@@ -28,6 +28,7 @@
 {% include 'include/login.html' %}
 {% include 'include/register.html' %}
 {% include 'include/create-card.html' %}
+{% include 'include/addBoard.html' %}
 
 <h1>ProMan</h1>
 
@@ -43,9 +44,9 @@
         {% endif %}
     </nav>
 </div>
-
-<div class="board-container"></div>
-
+<div class="board-container">
+    <button type="button" id="add-board-button">Add new board</button>
+</div>
 <script type="module" src="{{ url_for('static', filename='js/popup.js') }}"></script>
 </body>
 
