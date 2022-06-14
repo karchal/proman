@@ -21,8 +21,8 @@ export function htmlFactory(template) {
 }
 
 function boardBuilder(board) {
-    return `<section class="board" data-board-id=${board.id}>
-                <div class="board-header" data-board-id=${board.id}>
+    return `<section class="board" data-board-id="${board.id}">
+                <div class="board-header" data-board-id="${board.id}">
                     <span class="board-title">${board.title}</span>
                     <button class="board-add">Add Card</button>
                     <button class="board-toggle" data-board-id="${board.id}">
