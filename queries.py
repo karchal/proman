@@ -99,3 +99,12 @@ def create_new_card(board_id, card_details):  # TODO refactor user_id
         VALUES(%(board_id)s, %(status_id)s, %(title)s, 1, 1)
         """
         , variables={'board_id': board_id, 'status_id': card_details['statusId'], 'title': card_details['cardTitle']})
+
+
+def get_statuses():
+    return data_manager.execute_select(
+        """
+        SELECT * FROM statuses
+        ;
+        """
+    )

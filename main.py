@@ -96,6 +96,18 @@ def post_logout():
     return redirect(url_for('index'))
 
 
+@app.route('/api/statuses')
+@json_response
+def get_statuses():
+    return queries.get_statuses()
+
+
+@app.route('/api/statuses/<int:status_id>')
+@json_response
+def get_status(status_id):
+    return queries.get_card_status(status_id)
+
+
 def main():
     app.run(debug=True)
 
