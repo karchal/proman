@@ -73,3 +73,7 @@ def add_new_user(new_user):
         VALUES(%(username)s, %(password)s)
         """
         , {'username': new_user['username'], 'password': new_user['password']})
+
+
+def add_new_board(data):
+    pass

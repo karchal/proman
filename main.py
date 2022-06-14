@@ -76,6 +76,13 @@ def post_logout():
     return redirect(url_for('index'))
 
 
+@app.route("/add-new-board/<data>", methods=["POST"])
+@json_response
+def add_new_board(data):
+    data = [data, "public"]
+    queries.add_new_board(data)
+
+
 def main():
     app.run(debug=True)
 
