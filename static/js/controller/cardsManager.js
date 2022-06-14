@@ -16,6 +16,10 @@ export let cardsManager = {
             );
         }
     },
+    createCard: async function (cardTitle, boardId, statusId) {
+        await dataHandler.createNewCard(cardTitle, boardId, statusId);
+        await this.loadCards(boardId);  // TODO load card or refresh page?
+    },
 };
 
 function deleteButtonHandler(clickEvent) {

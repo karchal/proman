@@ -31,6 +31,19 @@ def get_boards():
     return queries.get_boards()
 
 
+@app.route("/api/boards/<int:board_id>")
+@json_response
+def get_board(board_id: int):
+    return queries.get_board(board_id)
+
+
+@app.route("/api/boards/<int:board_id>", methods=['PATCH'])
+@json_response
+def patch_rename_board(board_id: int):
+    board_title = request.get_json()
+    return queries.rename_board(board_id, board_title['boardTitle'])
+
+
 @app.route("/api/boards/<int:board_id>/cards/")
 @json_response
 def get_cards_for_board(board_id: int):
@@ -39,6 +52,13 @@ def get_cards_for_board(board_id: int):
     :param board_id: id of the parent board
     """
     return queries.get_cards_for_board(board_id)
+
+
+@app.route("/api/boards/<int:board_id>/cards", methods=['POST'])
+@json_response
+def post_create_card_for_board(board_id: int):
+    card_details = request.get_json()
+    return queries.create_new_card(board_id, card_details)
 
 
 @app.route('/register', methods=['POST'])
