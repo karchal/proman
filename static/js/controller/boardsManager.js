@@ -69,6 +69,14 @@ function showHideButtonHandler(clickEvent) {
     if (boardId === undefined) {
         boardId = target.parentElement.dataset.boardId;
     }
-    columnsManager.loadColumns(boardId);
-    cardsManager.loadCards(boardId);
+    const boardContent = document.querySelector(`.board-columns[data-board-id="${boardId}"]`);
+    console.log(boardContent);
+    if (boardContent.style.display = 'none') {
+        boardContent.style.display = 'flex';
+        columnsManager.loadColumns(boardId);
+        cardsManager.loadCards(boardId);
+    } else {
+        boardContent.style.display = 'none';
+        cardsManager.
+    }
 }
