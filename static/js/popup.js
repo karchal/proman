@@ -1,3 +1,5 @@
+import {dataHandler} from "./data/dataHandler.js";
+
 const loginPopup = document.querySelector('#login-popup');
 const loginButton = document.querySelector('#login-button');
 const loginForm = document.querySelector('#login');
@@ -16,6 +18,10 @@ const createCardForm = document.querySelector('#create-card-form');
 const createCardTitle = document.querySelector('#card-title');
 const createCardStatus = document.querySelector('#card-status');
 import {cardsManager} from "./controller/cardsManager.js";
+
+const addBoardPopup = document.querySelector('#add-board-popup');
+const addBoardButton = document.querySelector('#add-board-button');
+const addBoardTitle = document.querySelector('#board-title');
 
 const popUps = document.querySelectorAll('.popup');
 const form = document.querySelectorAll('.form');
@@ -126,3 +132,15 @@ createCardForm.addEventListener('submit', event => {
     createCardForm.reset();
     closePopup(createCardPopup);
 });
+
+addBoardButton.addEventListener('click', () => {
+    showPopup(addBoardPopup);
+})
+
+addBoardPopup.addEventListener('submit', event => {
+    event.preventDefault();
+
+    const boardTitle = addBoardTitle.value;
+    dataHandler.createNewBoard(boardTitle);
+    location.reload()
+})

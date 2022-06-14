@@ -96,11 +96,11 @@ def post_logout():
     return redirect(url_for('index'))
 
 
-@app.route("/add-new-board/<data>", methods=["POST"])
+@app.route("/api/boards", methods=["POST"])
 @json_response
-def add_new_board(data):
-    data = [data, "public"]
-    queries.add_new_board(data)
+def post_new_board():
+    data = request.get_json()
+    queries.add_new_board(data['boardTitle'])
 
 
 def main():

@@ -92,9 +92,13 @@ def add_new_user(new_user):
         , {'username': new_user['username'], 'password': new_user['password']})
 
 
-def add_new_board(data):
-    pass
-
+def add_new_board(boardTitle):
+    data_manager.execute_statement(
+        """
+        INSERT INTO boards (title, public, user_id)
+        VALUES(%(title)s, TRUE, 1 )
+        """
+        , variables={'title': boardTitle})
 
 def create_new_card(board_id, card_details):  # TODO refactor user_id
     data_manager.execute_statement(
