@@ -11,7 +11,7 @@ export let cardsManager = {
             const cardBuilder = htmlFactory(htmlTemplates.card);
             const content = cardBuilder(card);
             //domManager.addChild(`.board[data-board-id="${boardId}"]`, content);
-            domManager.addChild(`.board-column-content[data-column-id="${card.status_id}"]`, content)
+            domManager.addChild(`.board-column-content[data-column-id="${card.status_id}"][data-board-id="${boardId}"]`, content)
             domManager.addEventListener(
                 `.card[data-card-id="${card.id}"]`,
                 "click",

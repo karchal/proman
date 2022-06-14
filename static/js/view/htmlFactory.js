@@ -31,7 +31,7 @@ function boardBuilder(board) {
                         <i class="fas fa-chevron-down"></i>
                    </button>
                 </div>
-                <div class="board-columns"></div> 
+                <div class="board-columns" data-board-id="${board.id}"></div> 
             </section>`
 }
 
@@ -42,9 +42,9 @@ function cardBuilder(card) {
             </div>`
 }
 
-function columnBuilder(column) {
+function columnBuilder(column, boardId) {
     return `<div class="board-column" data-column-id="${column.id}">
                 <div class="board-column-title">${column.title}</div>
-                <div class="board-column-content" data-column-id="${column.id}"> </div>
+                <div class="board-column-content" data-column-id="${column.id}" data-board-id="${boardId}"> </div>
             </div>`
 }

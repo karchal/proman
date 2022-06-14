@@ -69,6 +69,6 @@ function showHideButtonHandler(clickEvent) {
     if (boardId === undefined) {
         boardId = target.parentElement.dataset.boardId;
     }
-    columnsManager.loadColumns();
+    columnsManager.loadColumns(boardId);
     cardsManager.loadCards(boardId);
 }
