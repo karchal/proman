@@ -32,6 +32,14 @@ def get_boards():
     )
 
 
+def get_board(board_id):
+    return data_manager.execute_select(
+        """
+        SELECT * FROM boards
+        WHERE id = %(board_id)s;
+        """, variables={'board_id': board_id}, fetchall=False)
+
+
 def get_cards_for_board(board_id):
 
     matching_cards = data_manager.execute_select(

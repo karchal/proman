@@ -31,6 +31,12 @@ def get_boards():
     return queries.get_boards()
 
 
+@app.route("/api/boards/<int:board_id>")
+@json_response
+def get_board(board_id: int):
+    return queries.get_board(board_id)
+
+
 @app.route("/api/boards/<int:board_id>/cards/")
 @json_response
 def get_cards_for_board(board_id: int):
