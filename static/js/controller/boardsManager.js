@@ -41,7 +41,10 @@ export let boardsManager = {
 };
 
 function showHideButtonHandler(clickEvent) {
-    const boardId = clickEvent.target.dataset.boardId;
-    console.log(boardId);
+    let target = clickEvent.target;
+    let boardId = target.dataset.boardId;
+    if (boardId === undefined) {
+        boardId = target.parentElement.dataset.boardId;
+    }
     cardsManager.loadCards(boardId);
 }
