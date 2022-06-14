@@ -45,7 +45,7 @@ def get_cards_for_board(board_id: int):
 def post_register_page():
     user_data = request.get_json()
     username = user_data['username']
-    password_1 = user_data['password1']
+    password_1 = user_data['password']
     password_2 = user_data['password2']
     if not queries.get_user_by_username(username):
         if password_1 == password_2:
