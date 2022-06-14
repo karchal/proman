@@ -200,6 +200,10 @@ section.board {
     animation: fadeOut 0.5s;
 }
 
+.add-board-button {
+    position: center;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
