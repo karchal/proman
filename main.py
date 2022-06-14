@@ -37,6 +37,13 @@ def get_board(board_id: int):
     return queries.get_board(board_id)
 
 
+@app.route("/api/boards/<int:board_id>", methods=['PATCH'])
+@json_response
+def patch_rename_board(board_id: int):
+    board_title = request.get_json()
+    return queries.rename_board(board_id, board_title['boardTitle'])
+
+
 @app.route("/api/boards/<int:board_id>/cards/")
 @json_response
 def get_cards_for_board(board_id: int):

@@ -25,6 +25,28 @@ export let boardsManager = {
                     showPopup(createCardPopup);
                 }
             );
+            domManager.addEventListener(
+                `.board-title[data-board-id="${board.id}"]`,
+                "click",
+                event => {
+                    const title = event.target.innerText;
+                    const titleElement = document.cloneNode(event.target);
+                    event.target.outerHTML = `<form id="new-title-form" style="display: inline-block;" class="board-title"><input type="text" id="new-title" value="${title}"><button type="submit">save</button></form>`;
+                    const newTitleForm = document.querySelector('#new-title-form');
+                    const newTitle = document.querySelector('#new-title');
+                    newTitleForm.addEventListener('submit', submitEvent => {
+                        submitEvent.preventDefault();
+                        console.log('New Title:', newTitle.value);
+                        console.log('event.target.outerHTML', event.target.outerHTML);
+                        event.target.innerText = newTitle.value;
+                        newTitleForm.outerHTML = event.target.outerHTML;
+                        console.log('event.target', event.target);
+                        dataHandler.renameBoard(board.id, newTitle.value)
+                        newTitleForm.reset();
+                        location.reload();
+                    });
+                }
+            );
         }
     },
     // loadBoard: async function (board_id) {
