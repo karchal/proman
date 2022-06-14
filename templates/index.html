@@ -25,7 +25,11 @@
 </head>
 <body>
 
+{% include 'include/login.html' %}
+{% include 'include/register.html' %}
+
 <h1>ProMan</h1>
+
 <div class="navbar">
     <nav>
         {% if user %}
@@ -33,14 +37,15 @@
                 <button type="submit">LOGOUT</button>
             </form>
         {% else %}
-            <button onclick="location.href=`/login`;">Login</button>
-            <button onclick="location.href=`/register`;">Register</button>
+            <button type="button" id="login-button">Login</button>
+            <button type="button" id="register-button">Register</button>
         {% endif %}
     </nav>
 </div>
 
 <div class="board-container"></div>
 
+<script src="{{ url_for('static', filename='js/popup.js') }}"></script>
 </body>
 
 </html>
