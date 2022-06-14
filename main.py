@@ -47,6 +47,13 @@ def get_cards_for_board(board_id: int):
     return queries.get_cards_for_board(board_id)
 
 
+@app.route("/api/boards/<int:board_id>/cards", methods=['POST'])
+@json_response
+def post_create_card_for_board(board_id: int):
+    card_details = request.get_json()
+    return queries.create_new_card(board_id, card_details)
+
+
 @app.route('/register', methods=['POST'])
 def post_register_page():
     user_data = request.get_json()

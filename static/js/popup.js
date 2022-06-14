@@ -11,10 +11,16 @@ const usernameRegister = document.querySelector('#username-register');
 const passwordRegister = document.querySelector('#password-register');
 const passwordRegister2 = document.querySelector('#password2-register');
 
+const createCardPopup = document.querySelector('#create-card');
+const createCardForm = document.querySelector('#create-card-form');
+const createCardTitle = document.querySelector('#card-title');
+const createCardStatus = document.querySelector('#card-status');
+import {cardsManager} from "./controller/cardsManager.js";
+
 const popUps = document.querySelectorAll('.popup');
 const form = document.querySelectorAll('.form');
 
-const showPopup = element => {
+export const showPopup = element => {
     element.classList.add('fade-in');
     element.classList.remove('fade-out');
     element.style.display = 'flex';
@@ -102,4 +108,21 @@ registerForm.addEventListener('submit', event => {
 
     registerForm.reset();
     closePopup(registerPopup);
+});
+
+createCardForm.addEventListener('submit', event => {
+    event.preventDefault();
+
+    const cardTitle = createCardTitle.value;
+    const cardStatus = createCardStatus.value;
+    const boardId = localStorage.getItem('boardId');
+    localStorage.removeItem('boardId');
+
+    console.log(cardTitle);
+    console.log(cardStatus);
+    console.log(boardId);
+    cardsManager.createCard(cardTitle, boardId, cardStatus);
+
+    createCardForm.reset();
+    closePopup(createCardPopup);
 });

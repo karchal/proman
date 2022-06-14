@@ -27,6 +27,7 @@
 
 {% include 'include/login.html' %}
 {% include 'include/register.html' %}
+{% include 'include/create-card.html' %}
 
 <h1>ProMan</h1>
 
@@ -45,7 +46,7 @@
 
 <div class="board-container"></div>
 
-<script src="{{ url_for('static', filename='js/popup.js') }}"></script>
+<script type="module" src="{{ url_for('static', filename='js/popup.js') }}"></script>
 </body>
 
 </html>

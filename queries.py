@@ -82,3 +82,12 @@ def add_new_user(new_user):
         VALUES(%(username)s, %(password)s)
         """
         , {'username': new_user['username'], 'password': new_user['password']})
+
+
+def create_new_card(board_id, card_details):  # TODO refactor user_id
+    data_manager.execute_insert(
+        """
+        INSERT INTO cards(board_id, status_id, title, card_order, user_id)
+        VALUES(%(board_id)s, %(status_id)s, %(title)s, 1, 1)
+        """
+        , variables={'board_id': board_id, 'status_id': card_details['statusId'], 'title': card_details['cardTitle']})
