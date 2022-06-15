@@ -116,11 +116,11 @@ def get_status(status_id):
     return queries.get_card_status(status_id)
 
 
-@app.route("/api/boards", methods=["POST"])
+@app.route("/api/users/<int:user_id>/boards", methods=["POST"])
 @json_response
-def post_new_board():
+def post_new_board(user_id):
     data = request.get_json()
-    queries.add_new_board(data['boardTitle'])
+    queries.add_new_board(data['boardTitle'], data['public_private'], user_id)
 
 
 def main():

@@ -29,6 +29,7 @@
 {% include 'include/register.html' %}
 {% include 'include/create-card.html' %}
 {% include 'include/addBoard.html' %}
+{% include 'include/add-private-board.html' %}
 
 <h1>ProMan</h1>
 
@@ -45,8 +46,19 @@
     </nav>
 </div>
 <div class="board-container">
-    <button type="button" id="add-board-button">Add new board</button>
+    {% if user %}
+        <button type="button" id="add-board-button">Add new board</button>
+        <button type="button" id="add-private-board-button">Add new private board</button>
+    {% else %}
+        <button type="button" id="add-board-button-login">Add new board</button>
+    {% endif %}
 </div>
+
+{% if user %}
+    <script>
+        const userId = {{ user.id }};
+    </script>
+{% endif %}
 <script type="module" src="{{ url_for('static', filename='js/popup.js') }}"></script>
 </body>
 

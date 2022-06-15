@@ -91,13 +91,13 @@ def add_new_user(new_user):
         , {'username': new_user['username'], 'password': new_user['password']})
 
 
-def add_new_board(board_title):
+def add_new_board(board_title, public, user_id):
+    public = 'TRUE' if public == 'public' else 'FALSE'
     data_manager.execute_statement(
         """
         INSERT INTO boards (title, public, user_id)
-        VALUES(%(title)s, TRUE, 1 )
-        """
-        , variables={'title': board_title})
+        VALUES(%(title)s, """ + public + ", %(user_id)s)"
+        , variables={'title': board_title, 'user_id': user_id})
 
 
 def create_new_card(board_id, card_details):  # TODO refactor user_id

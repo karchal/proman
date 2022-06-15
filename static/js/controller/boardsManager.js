@@ -9,15 +9,17 @@ export let boardsManager = {
     loadBoards: async function () {
         const boards = await dataHandler.getBoards();
         for (let board of boards) {
-            const boardBuilder = htmlFactory(htmlTemplates.board);
-            const content = boardBuilder(board);
-            domManager.addChild(".board-container", content);
-            domManager.addEventListener(
-                `.board-toggle[data-board-id="${board.id}"]`,
-                "click",
-                showHideButtonHandler,
-                //true
-            );
+            if (board.public || !board.public && board.user_id === userId) {
+                const boardBuilder = htmlFactory(htmlTemplates.board);
+                const content = boardBuilder(board);
+                domManager.addChild(".board-container", content);
+                domManager.addEventListener(
+                    `.board-toggle[data-board-id="${board.id}"]`,
+                    "click",
+                    showHideButtonHandler,
+                    //true
+                );
+            }
             domManager.addEventListener(
                 `.board-add[data-board-id="${board.id}"]`,
                 "click",
