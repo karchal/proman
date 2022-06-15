@@ -58,6 +58,10 @@
     <script>
         const userId = {{ user.id }};
     </script>
+{% else %}
+    <script>
+        const userId = 0;
+    </script>
 {% endif %}
 <script type="module" src="{{ url_for('static', filename='js/popup.js') }}"></script>
 </body>
