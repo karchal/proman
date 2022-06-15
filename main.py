@@ -63,6 +63,12 @@ def post_create_card_for_board(board_id: int):
     return queries.create_new_card(board_id, card_details)
 
 
+@app.route("/api/boards/<int:board_id>/cards/<int:card_id>", methods=['DELETE'])
+@json_response
+def delete_card_from_board(board_id: int, card_id: int):
+    return queries.remove_card(board_id, card_id)
+
+
 @app.route('/register', methods=['POST'])
 def post_register_page():
     user_data = request.get_json()

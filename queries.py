@@ -91,13 +91,13 @@ def add_new_user(new_user):
         , {'username': new_user['username'], 'password': new_user['password']})
 
 
-def add_new_board(boardTitle):
+def add_new_board(board_title):
     data_manager.execute_statement(
         """
         INSERT INTO boards (title, public, user_id)
         VALUES(%(title)s, TRUE, 1 )
         """
-        , variables={'title': boardTitle})
+        , variables={'title': board_title})
 
 
 def create_new_card(board_id, card_details):  # TODO refactor user_id
@@ -107,6 +107,15 @@ def create_new_card(board_id, card_details):  # TODO refactor user_id
         VALUES(%(board_id)s, %(status_id)s, %(title)s, 1, 1)
         """
         , variables={'board_id': board_id, 'status_id': card_details['statusId'], 'title': card_details['cardTitle']})
+
+
+def remove_card(board_id, card_id):
+    data_manager.execute_statement(
+        """
+        DELETE
+        FROM cards
+        WHERE board_id = %(board_id)s AND id = %(card_id)s
+        """, variables={'board_id': board_id, 'card_id': card_id})
 
 
 def get_statuses():

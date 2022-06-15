@@ -27,7 +27,10 @@ export let dataHandler = {
         return await apiPost(`/api/boards/${boardId}/cards`, {"cardTitle": cardTitle, "statusId": statusId});
     },
     renameBoard: async function (boardId, boardTitle) {
-        return await apiPatch(`/api/boards/${boardId}`, {"boardTitle": boardTitle})
+        return await apiPatch(`/api/boards/${boardId}`, {"boardTitle": boardTitle});
+    },
+    deleteCard: async function (boardId, cardId) {
+        return await apiDelete(`/api/boards/${boardId}/cards/${cardId}`);
     },
 };
 
@@ -54,6 +57,12 @@ async function apiPost(url, payload) {
 }
 
 async function apiDelete(url) {
+    let response = await fetch(url, {
+        method: "DELETE",
+    });
+    if (response.ok) {
+        return await response.json();
+    }
 }
 
 async function apiPut(url) {
