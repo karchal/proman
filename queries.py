@@ -49,7 +49,6 @@ def rename_board(board_id, board_title):
 
 
 def get_cards_for_board(board_id):
-
     matching_cards = data_manager.execute_select(
         """
         SELECT * FROM cards
@@ -99,6 +98,7 @@ def add_new_board(boardTitle):
         VALUES(%(title)s, TRUE, 1 )
         """
         , variables={'title': boardTitle})
+
 
 def create_new_card(board_id, card_details):  # TODO refactor user_id
     data_manager.execute_statement(
