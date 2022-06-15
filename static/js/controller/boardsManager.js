@@ -42,7 +42,7 @@ export let boardsManager = {
                         submitEvent.preventDefault();
                         event.target.innerText = newTitle.value;
                         newTitleForm.outerHTML = event.target.outerHTML;
-                        dataHandler.renameBoard(board.id, newTitle.value)
+                        dataHandler.renameBoard(board.id, newTitle.value, userId);
                         newTitleForm.reset();
                         location.reload();
                     });
