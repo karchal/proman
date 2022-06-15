@@ -10,10 +10,20 @@ export let cardsManager = {
             const content = cardBuilder(card);
             domManager.addChild(`.board-column-content[data-column-id="${card.status_id}"][data-board-id="${boardId}"]`, content)
             domManager.addEventListener(
-                `.card[data-card-id="${card.id}"]`,
+                `.card-remove[data-card-id="${card.id}"]`,
                 "click",
                 deleteButtonHandler
             );
+            domManager.addEventListener(
+                `.card[data-card-id="${card.id}"]`,
+                "dragstart",
+                dragStartHandler
+            )
+            domManager.addEventListener(
+                `.card[data-card-id="${card.id}"]`,
+                "dragend",
+                dragEndHandler
+            )
         }
     },
     createCard: async function (cardTitle, boardId, statusId) {
@@ -23,4 +33,12 @@ export let cardsManager = {
 };
 
 function deleteButtonHandler(clickEvent) {
+}
+
+function dragStartHandler(){
+
+}
+
+function dragStartHandler(){
+
 }
