@@ -65,16 +65,13 @@ export let boardsManager = {
 };
 
 function showHideButtonHandler(clickEvent) {
-    let target = clickEvent.target;
-    let boardId = target.dataset.boardId;
-    if (boardId === undefined) {
-        boardId = target.parentElement.dataset.boardId;
-    }
+    const boardId = clickEvent.target.dataset.boardId;
     if (domManager.hasChild(`.board-columns[data-board-id="${boardId}"]`)) {
         domManager.removeAllChildren(`.board-columns[data-board-id="${boardId}"]`);
     } else {
         loadBoardContent(boardId);
     }
+    domManager.toggleCSSClasses(`.fas[data-board-id="${boardId}"]`, 'fa-chevron-down', 'fa-chevron-up');
 }
 
 async function loadBoardContent(boardId){

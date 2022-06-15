@@ -22,5 +22,9 @@ export let domManager = {
     hasChild(parentIdentifier) {
         const parent = document.querySelector(parentIdentifier);
         return parent.hasChildNodes();
+    },
+    toggleCSSClasses(elementIdentifier, ...cls) {
+        const element = document.querySelector(elementIdentifier);
+        cls.map(cl => element.classList.toggle(cl));
     }
 };
