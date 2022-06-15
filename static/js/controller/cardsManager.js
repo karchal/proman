@@ -33,6 +33,17 @@ export let cardsManager = {
 };
 
 function deleteButtonHandler(clickEvent) {
+    let boardId
+    if (clickEvent.target.parentElement.parentElement.hasAttribute('data-board-id')) {
+        boardId = clickEvent.target.parentElement.parentElement.dataset.boardId;
+    } else {
+        boardId = clickEvent.target.parentElement.parentElement.parentElement.dataset.boardId;
+    }
+    const cardId = clickEvent.target.parentElement.dataset.cardId;
+    if (confirm('Are you sure want to delete that card?')) {
+        dataHandler.deleteCard(boardId, cardId);
+    }
+    location.reload();
 }
 
 function dragStartHandler(){
