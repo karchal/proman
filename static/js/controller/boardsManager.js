@@ -34,7 +34,6 @@ export let boardsManager = {
                 "click",
                 event => {
                     const title = event.target.innerText;
-                    const titleElement = document.cloneNode(event.target);
                     event.target.outerHTML = `<form id="new-title-form" style="display: inline-block;" class="board-title"><input type="text" id="new-title" value="${title}"><button type="submit">save</button></form>`;
                     const newTitleForm = document.querySelector('#new-title-form');
                     const newTitle = document.querySelector('#new-title');
@@ -52,7 +51,7 @@ export let boardsManager = {
                 "click",
                 event => {
                 if (confirm("Are you sure you want to delete this board?")) {
-                    dataHandler.deleteBoard(board.id)
+                    dataHandler.deleteBoard(board.id, userId)
                      location.reload();
                 } else {
                     alert('Operation aborted!')

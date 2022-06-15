@@ -123,10 +123,17 @@ def post_new_board(user_id):
     queries.add_new_board(data['boardTitle'], data['public_private'], user_id)
 
 
-@app.route("/api/boards/<int:board_id>", methods=["DELETE"])
+@app.route("/api/users/<int:user_id>/boards/<int:board_id>", methods=["DELETE"])
 @json_response
-def delete_board(board_id):
-    return queries.delete_board(board_id)
+def delete_board(user_id: int, board_id: int):
+    return queries.delete_board(board_id, user_id)
+
+
+@app.route("/api/users/<int:user_id>/boards/<int:board_id>/cards/<int:card_id>", methods=['PATCH'])
+@json_response
+def patch_rename_card(user_id: int, board_id: int, card_id: int):
+    new_card_title = request.get_json()
+    return queries.rename_card(board_id, card_id, new_card_title['cardTitle'], user_id)
 
 
 def main():

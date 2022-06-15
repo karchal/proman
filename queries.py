@@ -128,10 +128,19 @@ def get_statuses():
     )
 
 
-def delete_board(board_id):
+def delete_board(board_id, user_id):
     data_manager.execute_statement(
         """
         DELETE FROM boards
-        WHERE id=(%(board_id)s);
+        WHERE id=(%(board_id)s) AND user_id = %(user_id)s;
         """
-        , variables={'board_id': board_id})
+        , variables={'board_id': board_id, 'user_id': user_id})
+
+
+def rename_card(board_id, card_id, new_card_title, user_id):
+    return data_manager.execute_statement(
+        """UPDATE cards
+        SET title = %(new_card_title)s
+        WHERE id = %(card_id)s AND board_id = %(board_id)s AND user_id = %(user_id)s
+        """, variables={'card_id': card_id, 'board_id': board_id, 'new_card_title': new_card_title,
+                        'user_id': user_id})

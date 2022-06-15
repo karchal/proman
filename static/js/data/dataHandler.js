@@ -32,9 +32,12 @@ export let dataHandler = {
     deleteCard: async function (boardId, cardId, userId) {
         return await apiDelete(`/api/users/${userId}/boards/${boardId}/cards/${cardId}`);
     },
-    deleteBoard: async function (boardId) {
+    deleteBoard: async function (boardId, userId) {
         // creates new board, saves it and calls the callback function with its data
-        return await apiDelete(`/api/boards/${boardId}`)
+        return await apiDelete(`/api/users/${userId}/boards/${boardId}`)
+    },
+    renameCard: async function (boardId, cardId, cardTitle, userId) {
+        await apiPatch(`/api/users/${userId}/boards/${boardId}/cards/${cardId}`, {"cardTitle": cardTitle});
     },
 };
 
