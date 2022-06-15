@@ -65,6 +65,12 @@ section.board {
     display: inline-block;
 }
 
+.fas.fa-trash-alt.board{
+    float: right;
+    margin-top: 13px;
+    cursor: pointer;
+}
+
 .board-toggle {
     float: right;
     margin: 13px;

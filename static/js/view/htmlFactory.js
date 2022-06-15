@@ -23,23 +23,25 @@ export function htmlFactory(template) {
 }
 
 function boardBuilder(board) {
-    return `<section class="board" data-board-id="${board.id}">
+    let boardComponent = `<section class="board" data-board-id="${board.id}">
                 <div class="board-header" data-board-id="${board.id}">
                     <span class="board-title" data-board-id="${board.id}">${board.title}</span>
                     <button class="board-add" data-board-id="${board.id}">Add Card</button>
                     <button class="board-toggle" data-board-id="${board.id}">
                         <i class="fas fa-chevron-down" data-board-id="${board.id}"></i>
-                   </button>
-                </div>
+                   </button>`;
+    boardComponent += (board.user_id === userId) ? `<button class="fas fa-trash-alt board" data-board-id="${board.id}"></button>` : ``;
+    boardComponent += `</div>
                 <div class="board-columns" data-board-id="${board.id}"></div> 
-            </section>`
+            </section>`;
+    return boardComponent;
 }
 
 function cardBuilder(card) {
-    return `<div class="card" data-card-id="${card.id}" draggable="true">
-                <div class="card-remove" data-card-id="${card.id}"><i class="fas fa-trash-alt"></i></div>
-                <div class="card-title" data-card-id="${card.id}">${card.title}</div>
-            </div>`
+    let cardComponent = `<div class="card" data-card-id="${card.id}" draggable="true">`;
+    cardComponent += (card.user_id === userId) ? `<div class="card-remove" data-card-id="${card.id}"><i class="fas fa-trash-alt"></i></div>` : ``;
+    cardComponent += `<div class="card-title" data-card-board-id="${card.board_id}" data-card-id="${card.id}">${card.title}</div>`;
+    return cardComponent;
 }
 
 function columnBuilder(column, boardId) {

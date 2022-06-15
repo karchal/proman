@@ -39,11 +39,11 @@ def get_board(board_id: int):
     return queries.get_board(board_id)
 
 
-@app.route("/api/boards/<int:board_id>", methods=['PATCH'])
+@app.route("/api/users/<int:user_id>/boards/<int:board_id>", methods=['PATCH'])
 @json_response
-def patch_rename_board(board_id: int):
+def patch_rename_board(user_id: int, board_id: int):
     board_title = request.get_json()
-    return queries.rename_board(board_id, board_title['boardTitle'])
+    return queries.rename_board(board_id, board_title['boardTitle'], user_id)
 
 
 @app.route("/api/boards/<int:board_id>/cards/")
@@ -56,17 +56,17 @@ def get_cards_for_board(board_id: int):
     return queries.get_cards_for_board(board_id)
 
 
-@app.route("/api/boards/<int:board_id>/cards", methods=['POST'])
+@app.route("/api/users/<int:user_id>/boards/<int:board_id>/cards", methods=['POST'])
 @json_response
-def post_create_card_for_board(board_id: int):
+def post_create_card_for_board(user_id: int, board_id: int):
     card_details = request.get_json()
-    return queries.create_new_card(board_id, card_details)
+    return queries.create_new_card(board_id, card_details, user_id)
 
 
-@app.route("/api/boards/<int:board_id>/cards/<int:card_id>", methods=['DELETE'])
+@app.route("/api/users/<int:user_id>/boards/<int:board_id>/cards/<int:card_id>", methods=['DELETE'])
 @json_response
-def delete_card_from_board(board_id: int, card_id: int):
-    return queries.remove_card(board_id, card_id)
+def delete_card_from_board(user_id: int, board_id: int, card_id: int):
+    return queries.remove_card(board_id, card_id, user_id)
 
 
 @app.route('/register', methods=['POST'])
@@ -116,11 +116,24 @@ def get_status(status_id):
     return queries.get_card_status(status_id)
 
 
-@app.route("/api/boards", methods=["POST"])
+@app.route("/api/users/<int:user_id>/boards", methods=["POST"])
 @json_response
-def post_new_board():
+def post_new_board(user_id):
     data = request.get_json()
-    queries.add_new_board(data['boardTitle'])
+    queries.add_new_board(data['boardTitle'], data['public_private'], user_id)
+
+
+@app.route("/api/users/<int:user_id>/boards/<int:board_id>", methods=["DELETE"])
+@json_response
+def delete_board(user_id: int, board_id: int):
+    return queries.delete_board(board_id, user_id)
+
+
+@app.route("/api/users/<int:user_id>/boards/<int:board_id>/cards/<int:card_id>", methods=['PATCH'])
+@json_response
+def patch_rename_card(user_id: int, board_id: int, card_id: int):
+    new_card_title = request.get_json()
+    return queries.rename_card(board_id, card_id, new_card_title['cardTitle'], user_id)
 
 
 def main():

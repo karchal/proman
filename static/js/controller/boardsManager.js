@@ -9,15 +9,17 @@ export let boardsManager = {
     loadBoards: async function () {
         const boards = await dataHandler.getBoards();
         for (let board of boards) {
-            const boardBuilder = htmlFactory(htmlTemplates.board);
-            const content = boardBuilder(board);
-            domManager.addChild(".board-container", content);
-            domManager.addEventListener(
-                `.board-toggle[data-board-id="${board.id}"]`,
-                "click",
-                showHideButtonHandler,
-                //true
-            );
+            if (board.public || !board.public && board.user_id === userId) {
+                const boardBuilder = htmlFactory(htmlTemplates.board);
+                const content = boardBuilder(board);
+                domManager.addChild(".board-container", content);
+                domManager.addEventListener(
+                    `.board-toggle[data-board-id="${board.id}"]`,
+                    "click",
+                    showHideButtonHandler,
+                    //true
+                );
+            }
             domManager.addEventListener(
                 `.board-add[data-board-id="${board.id}"]`,
                 "click",
@@ -32,23 +34,29 @@ export let boardsManager = {
                 "click",
                 event => {
                     const title = event.target.innerText;
-                    const titleElement = document.cloneNode(event.target);
                     event.target.outerHTML = `<form id="new-title-form" style="display: inline-block;" class="board-title"><input type="text" id="new-title" value="${title}"><button type="submit">save</button></form>`;
                     const newTitleForm = document.querySelector('#new-title-form');
                     const newTitle = document.querySelector('#new-title');
                     newTitleForm.addEventListener('submit', submitEvent => {
                         submitEvent.preventDefault();
-                        console.log('New Title:', newTitle.value);
-                        console.log('event.target.outerHTML', event.target.outerHTML);
                         event.target.innerText = newTitle.value;
                         newTitleForm.outerHTML = event.target.outerHTML;
-                        console.log('event.target', event.target);
-                        dataHandler.renameBoard(board.id, newTitle.value)
+                        dataHandler.renameBoard(board.id, newTitle.value, userId);
                         newTitleForm.reset();
                         location.reload();
                     });
                 }
             );
+            domManager.addEventListener(`.fas.fa-trash-alt.board[data-board-id="${board.id}"]`,
+                "click",
+                event => {
+                if (confirm("Are you sure you want to delete this board?")) {
+                    dataHandler.deleteBoard(board.id, userId)
+                     location.reload();
+                } else {
+                    alert('Operation aborted!')
+                }
+                })
         }
     },
 };

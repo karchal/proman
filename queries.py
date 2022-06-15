@@ -40,12 +40,12 @@ def get_board(board_id):
         """, variables={'board_id': board_id}, fetchall=False)
 
 
-def rename_board(board_id, board_title):
+def rename_board(board_id, board_title, user_id):
     return data_manager.execute_statement(
         """UPDATE boards
         SET title = %(board_title)s
-        WHERE id = %(board_id)s
-        """, variables={'board_id': board_id, 'board_title': board_title})
+        WHERE id = %(board_id)s AND user_id = %(user_id)s
+        """, variables={'board_id': board_id, 'board_title': board_title, 'user_id': user_id})
 
 
 def get_cards_for_board(board_id):
@@ -91,31 +91,32 @@ def add_new_user(new_user):
         , {'username': new_user['username'], 'password': new_user['password']})
 
 
-def add_new_board(board_title):
+def add_new_board(board_title, public, user_id):
+    public = 'TRUE' if public == 'public' else 'FALSE'
     data_manager.execute_statement(
         """
         INSERT INTO boards (title, public, user_id)
-        VALUES(%(title)s, TRUE, 1 )
-        """
-        , variables={'title': board_title})
+        VALUES(%(title)s, """ + public + ", %(user_id)s)"
+        , variables={'title': board_title, 'user_id': user_id})
 
 
-def create_new_card(board_id, card_details):  # TODO refactor user_id
+def create_new_card(board_id, card_details, user_id):
     data_manager.execute_statement(
         """
         INSERT INTO cards(board_id, status_id, title, card_order, user_id)
-        VALUES(%(board_id)s, %(status_id)s, %(title)s, 1, 1)
+        VALUES(%(board_id)s, %(status_id)s, %(title)s, 1, %(user_id)s)
         """
-        , variables={'board_id': board_id, 'status_id': card_details['statusId'], 'title': card_details['cardTitle']})
+        , variables={'board_id': board_id, 'status_id': card_details['statusId'],
+                     'title': card_details['cardTitle'], 'user_id': user_id})
 
 
-def remove_card(board_id, card_id):
+def remove_card(board_id, card_id, user_id):
     data_manager.execute_statement(
         """
         DELETE
         FROM cards
-        WHERE board_id = %(board_id)s AND id = %(card_id)s
-        """, variables={'board_id': board_id, 'card_id': card_id})
+        WHERE board_id = %(board_id)s AND id = %(card_id)s AND user_id = %(user_id)s
+        """, variables={'board_id': board_id, 'card_id': card_id, 'user_id': user_id})
 
 
 def get_statuses():
@@ -125,3 +126,21 @@ def get_statuses():
         ;
         """
     )
+
+
+def delete_board(board_id, user_id):
+    data_manager.execute_statement(
+        """
+        DELETE FROM boards
+        WHERE id=(%(board_id)s) AND user_id = %(user_id)s;
+        """
+        , variables={'board_id': board_id, 'user_id': user_id})
+
+
+def rename_card(board_id, card_id, new_card_title, user_id):
+    return data_manager.execute_statement(
+        """UPDATE cards
+        SET title = %(new_card_title)s
+        WHERE id = %(card_id)s AND board_id = %(board_id)s AND user_id = %(user_id)s
+        """, variables={'card_id': card_id, 'board_id': board_id, 'new_card_title': new_card_title,
+                        'user_id': user_id})

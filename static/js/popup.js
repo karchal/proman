@@ -21,7 +21,14 @@ import {cardsManager} from "./controller/cardsManager.js";
 
 const addBoardPopup = document.querySelector('#add-board-popup');
 const addBoardButton = document.querySelector('#add-board-button');
+const addBoardButtonLogin = document.querySelector('#add-board-button-login');
 const addBoardTitle = document.querySelector('#board-title');
+const addBoardForm = document.querySelector('#add-board');
+
+const addPrivateBoardPopup = document.querySelector('#add-private-board-popup');
+const addPrivateBoardButton = document.querySelector('#add-private-board-button');
+const addPrivateBoardTitle = document.querySelector('#private-board-title');
+const addPrivateBoardForm = document.querySelector('#add-private-board');
 
 const popUps = document.querySelectorAll('.popup');
 const form = document.querySelectorAll('.form');
@@ -37,13 +44,23 @@ const closePopup = element => {
     element.style.display = 'none';
 }
 
-loginButton.addEventListener('click', () => {
-    showPopup(loginPopup);
-})
+if (loginButton) {
+    loginButton.addEventListener('click', () => {
+        showPopup(loginPopup);
+    });
+}
 
-registerButton.addEventListener('click', () => {
-    showPopup(registerPopup);
-})
+if (addBoardButtonLogin) {
+    addBoardButtonLogin.addEventListener('click', () => {
+        showPopup(loginPopup);
+    });
+}
+
+if (registerButton) {
+    registerButton.addEventListener('click', () => {
+        showPopup(registerPopup);
+    });
+}
 
 popUps.forEach(popUp => {
     popUp.addEventListener('click', () => {
@@ -116,31 +133,51 @@ registerForm.addEventListener('submit', event => {
     closePopup(registerPopup);
 });
 
-createCardForm.addEventListener('submit', event => {
-    event.preventDefault();
+if (createCardForm) {
+    createCardForm.addEventListener('submit', event => {
+        event.preventDefault();
 
-    const cardTitle = createCardTitle.value;
-    const cardStatus = createCardStatus.value;
-    const boardId = localStorage.getItem('boardId');
-    localStorage.removeItem('boardId');
+        const cardTitle = createCardTitle.value;
+        const cardStatus = createCardStatus.value;
+        const boardId = localStorage.getItem('boardId');
+        localStorage.removeItem('boardId');
 
-    console.log(cardTitle);
-    console.log(cardStatus);
-    console.log(boardId);
-    cardsManager.createCard(cardTitle, boardId, cardStatus);
+        console.log(cardTitle);
+        console.log(cardStatus);
+        console.log(boardId);
+        cardsManager.createCard(cardTitle, boardId, cardStatus);
 
-    createCardForm.reset();
-    closePopup(createCardPopup);
-});
+        createCardForm.reset();
+        closePopup(createCardPopup);
+    });
+}
 
-addBoardButton.addEventListener('click', () => {
-    showPopup(addBoardPopup);
-})
+if(addBoardButton) {
+    addBoardButton.addEventListener('click', () => {
+        showPopup(addBoardPopup);
+    });
+}
 
 addBoardPopup.addEventListener('submit', event => {
     event.preventDefault();
 
     const boardTitle = addBoardTitle.value;
-    dataHandler.createNewBoard(boardTitle);
+    const userId = addBoardForm.userid.value;
+    dataHandler.createNewBoard(boardTitle, 'public', userId);
     location.reload()
-})
+});
+
+if (addPrivateBoardButton) {
+    addPrivateBoardButton.addEventListener('click', () => {
+        showPopup(addPrivateBoardPopup);
+    });
+}
+
+addPrivateBoardPopup.addEventListener('submit', event => {
+    event.preventDefault();
+
+    const boardTitle = addPrivateBoardTitle.value;
+    const userId = addPrivateBoardForm.userid.value;
+    dataHandler.createNewBoard(boardTitle, 'private', userId);
+    location.reload()
+});
