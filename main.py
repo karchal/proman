@@ -120,7 +120,13 @@ def get_status(status_id):
 @json_response
 def post_new_board():
     data = request.get_json()
-    queries.add_new_board(data['boardTitle'])
+    return queries.add_new_board(data['boardTitle'])
+
+
+@app.route("/api/boards/<int:board_id>", methods=["DELETE"])
+@json_response
+def delete_board(board_id):
+    return queries.delete_board(board_id)
 
 
 def main():
