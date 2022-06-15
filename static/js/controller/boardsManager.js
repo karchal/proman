@@ -38,11 +38,8 @@ export let boardsManager = {
                     const newTitle = document.querySelector('#new-title');
                     newTitleForm.addEventListener('submit', submitEvent => {
                         submitEvent.preventDefault();
-                        console.log('New Title:', newTitle.value);
-                        console.log('event.target.outerHTML', event.target.outerHTML);
                         event.target.innerText = newTitle.value;
                         newTitleForm.outerHTML = event.target.outerHTML;
-                        console.log('event.target', event.target);
                         dataHandler.renameBoard(board.id, newTitle.value)
                         newTitleForm.reset();
                         location.reload();
