@@ -126,3 +126,12 @@ def get_statuses():
         ;
         """
     )
+
+
+def delete_board(board_id):
+    data_manager.execute_statement(
+        """
+        DELETE FROM boards
+        WHERE id=(%(board_id)s);
+        """
+        , variables={'board_id': board_id})

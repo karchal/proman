@@ -123,6 +123,12 @@ def post_new_board(user_id):
     queries.add_new_board(data['boardTitle'], data['public_private'], user_id)
 
 
+@app.route("/api/boards/<int:board_id>", methods=["DELETE"])
+@json_response
+def delete_board(board_id):
+    return queries.delete_board(board_id)
+
+
 def main():
     app.run(debug=True)
 

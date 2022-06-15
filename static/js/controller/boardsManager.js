@@ -40,17 +40,24 @@ export let boardsManager = {
                     const newTitle = document.querySelector('#new-title');
                     newTitleForm.addEventListener('submit', submitEvent => {
                         submitEvent.preventDefault();
-                        console.log('New Title:', newTitle.value);
-                        console.log('event.target.outerHTML', event.target.outerHTML);
                         event.target.innerText = newTitle.value;
                         newTitleForm.outerHTML = event.target.outerHTML;
-                        console.log('event.target', event.target);
                         dataHandler.renameBoard(board.id, newTitle.value)
                         newTitleForm.reset();
                         location.reload();
                     });
                 }
             );
+            domManager.addEventListener(`.fas.fa-trash-alt.board[data-board-id="${board.id}"]`,
+                "click",
+                event => {
+                if (confirm("Are you sure you want to delete this board?")) {
+                    dataHandler.deleteBoard(board.id)
+                     location.reload();
+                } else {
+                    alert('Operation aborted!')
+                }
+                })
         }
     },
 };
