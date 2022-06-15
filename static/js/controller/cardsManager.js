@@ -17,7 +17,7 @@ export let cardsManager = {
         }
     },
     createCard: async function (cardTitle, boardId, statusId) {
-        await dataHandler.createNewCard(cardTitle, boardId, statusId);
+        await dataHandler.createNewCard(cardTitle, boardId, statusId, userId);
         location.reload();
     },
 };
@@ -31,7 +31,7 @@ function deleteButtonHandler(clickEvent) {
     }
     const cardId = clickEvent.target.parentElement.dataset.cardId;
     if (confirm('Are you sure want to delete that card?')) {
-        dataHandler.deleteCard(boardId, cardId);
+        dataHandler.deleteCard(boardId, cardId, userId);
     }
     location.reload();
 }

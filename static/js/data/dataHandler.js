@@ -22,15 +22,15 @@ export let dataHandler = {
         // creates new board, saves it and calls the callback function with its data
         return await apiPost(`/api/users/${userId}/boards`, {"boardTitle": boardTitle, "public_private": public_private})
     },
-    createNewCard: async function (cardTitle, boardId, statusId) {
+    createNewCard: async function (cardTitle, boardId, statusId, userId) {
         // creates new card, saves it and calls the callback function with its data
-        return await apiPost(`/api/boards/${boardId}/cards`, {"cardTitle": cardTitle, "statusId": statusId});
+        return await apiPost(`/api/users/${userId}/boards/${boardId}/cards`, {"cardTitle": cardTitle, "statusId": statusId});
     },
-    renameBoard: async function (boardId, boardTitle) {
-        return await apiPatch(`/api/boards/${boardId}`, {"boardTitle": boardTitle});
+    renameBoard: async function (boardId, boardTitle, userId) {
+        return await apiPatch(`/api/users/${userId}/boards/${boardId}`, {"boardTitle": boardTitle});
     },
-    deleteCard: async function (boardId, cardId) {
-        return await apiDelete(`/api/boards/${boardId}/cards/${cardId}`);
+    deleteCard: async function (boardId, cardId, userId) {
+        return await apiDelete(`/api/users/${userId}/boards/${boardId}/cards/${cardId}`);
     },
 };
 

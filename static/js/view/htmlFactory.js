@@ -29,17 +29,17 @@ function boardBuilder(board) {
                     <button class="board-add" data-board-id="${board.id}">Add Card</button>
                     <button class="board-toggle" data-board-id="${board.id}">
                         <i class="fas fa-chevron-down" data-board-id="${board.id}"></i>
-                   </button>
+                    </button>
                 </div>
                 <div class="board-columns" data-board-id="${board.id}"></div> 
             </section>`
 }
 
 function cardBuilder(card) {
-    return `<div class="card" data-card-id="${card.id}">
-                <div class="card-remove" data-card-id="${card.id}"><i class="fas fa-trash-alt"></i></div>
-                <div class="card-title">${card.title}</div>
-            </div>`
+    let cardComponent = `<div class="card" data-card-id="${card.id}">`;
+    cardComponent += (card.user_id === userId) ? `<div class="card-remove" data-card-id="${card.id}"><i class="fas fa-trash-alt"></i></div>` : ``;
+    cardComponent += `<div class="card-title">${card.title}</div></div>`;
+    return cardComponent;
 }
 
 function columnBuilder(column, boardId) {
