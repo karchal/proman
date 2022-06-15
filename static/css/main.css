@@ -71,7 +71,7 @@ section.board {
 }
 
 .board-columns {
-    display: none;
+    display: flex;
     flex-wrap: nowrap;
 }
 

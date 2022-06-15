@@ -15,7 +15,8 @@ export let boardsManager = {
             domManager.addEventListener(
                 `.board-toggle[data-board-id="${board.id}"]`,
                 "click",
-                showHideButtonHandler
+                showHideButtonHandler,
+                //true
             );
             domManager.addEventListener(
                 `.board-add[data-board-id="${board.id}"]`,
@@ -69,14 +70,14 @@ function showHideButtonHandler(clickEvent) {
     if (boardId === undefined) {
         boardId = target.parentElement.dataset.boardId;
     }
-    const boardContent = document.querySelector(`.board-columns[data-board-id="${boardId}"]`);
-    console.log(boardContent);
-    if (boardContent.style.display = 'none') {
-        boardContent.style.display = 'flex';
-        columnsManager.loadColumns(boardId);
-        cardsManager.loadCards(boardId);
+    if (domManager.hasChild(`.board-columns[data-board-id="${boardId}"]`)) {
+        domManager.removeAllChildren(`.board-columns[data-board-id="${boardId}"]`);
     } else {
-        boardContent.style.display = 'none';
-        cardsManager.
+        loadBoardContent(boardId);
     }
+}
+
+async function loadBoardContent(boardId){
+    await columnsManager.loadColumns(boardId);
+    cardsManager.loadCards(boardId);
 }
