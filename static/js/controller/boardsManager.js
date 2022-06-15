@@ -32,7 +32,6 @@ export let boardsManager = {
                 "click",
                 event => {
                     const title = event.target.innerText;
-                    const titleElement = document.cloneNode(event.target);
                     event.target.outerHTML = `<form id="new-title-form" style="display: inline-block;" class="board-title"><input type="text" id="new-title" value="${title}"><button type="submit">save</button></form>`;
                     const newTitleForm = document.querySelector('#new-title-form');
                     const newTitle = document.querySelector('#new-title');

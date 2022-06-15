@@ -36,6 +36,9 @@ export let dataHandler = {
         // creates new board, saves it and calls the callback function with its data
         return await apiDelete(`/api/boards/${boardId}`)
     },
+    renameCard: async function (boardId, cardId,  cardTitle) {
+        await apiPatch(`/api/boards/${boardId}/cards/${cardId}`, {"cardTitle": cardTitle});
+    }
 };
 
 async function apiGet(url) {

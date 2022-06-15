@@ -129,6 +129,13 @@ def delete_board(board_id):
     return queries.delete_board(board_id)
 
 
+@app.route("/api/boards/<int:board_id>/cards/<int:card_id>", methods=['PATCH'])
+@json_response
+def patch_rename_card(board_id: int, card_id: int):
+    new_card_title = request.get_json()
+    return queries.rename_card(board_id, card_id, new_card_title['cardTitle'])
+
+
 def main():
     app.run(debug=True)
 
