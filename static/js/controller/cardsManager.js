@@ -6,6 +6,7 @@ export let cardsManager = {
     loadCards: async function (boardId) {
         const cards = await dataHandler.getCardsByBoardId(boardId);
         for (let card of cards) {
+            console.log(card);
             const cardBuilder = htmlFactory(htmlTemplates.card);
             const content = cardBuilder(card);
             domManager.addChild(`.board-column-content[data-column-id="${card.status_id}"][data-board-id="${boardId}"]`, content)
@@ -46,10 +47,10 @@ function deleteButtonHandler(clickEvent) {
     location.reload();
 }
 
-function dragStartHandler(){
-
+function dragStartHandler(dragStartEvent){
+    dragStartEvent.target.classList.add("dragged");
 }
 
-function dragStartHandler(){
-
+function dragEndHandler(dragEndEvent){
+    dragEndEvent.target.classList.remove("dragged");
 }

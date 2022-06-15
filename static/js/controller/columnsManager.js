@@ -10,6 +10,18 @@ export let columnsManager = {
             const columnBuilder = htmlFactory(htmlTemplates.column);
             const content = columnBuilder(column, boardId);
             domManager.addChild(`.board-columns[data-board-id="${boardId}"]`, content);
+            domManager.addEventListener(
+                `.board-columns[data-board-id="${boardId}"]`,
+                "dragenter",
+                dragEnterHandler
+            )
+
+
         }
     }
+}
+
+function dragEnterHandler(dragEnterEvent) {
+    dragEnterEvent.target.classList.add("drop-zone")
+
 }
