@@ -51,17 +51,6 @@ export let boardsManager = {
             );
         }
     },
-    // loadBoard: async function (board_id) {
-    //     const board = await dataHandler.getBoard(board_id);
-    //     const boardBuilder = htmlFactory(htmlTemplates.board);
-    //     const content = boardBuilder(board);
-    //     domManager.addChild(".board-container", content);
-    //     domManager.addEventListener(
-    //         `.toggle-board-button[data-board-id="${board.id}"]`,
-    //         "click",
-    //         showHideButtonHandler
-    //     );
-    // },
 };
 
 function showHideButtonHandler(clickEvent) {
