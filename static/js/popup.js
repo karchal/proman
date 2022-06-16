@@ -1,4 +1,3 @@
-import {dataHandler} from "./data/dataHandler.js";
 import {cardsManager} from "./controller/cardsManager.js";
 import {boardsManager} from "./controller/boardsManager.js";
 
