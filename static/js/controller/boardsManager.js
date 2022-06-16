@@ -6,7 +6,7 @@ import {showPopup} from "../popup.js";
 import {columnsManager} from "./columnsManager.js";
 
 export let boardsManager = {
-    loadBoards: async function () {
+    loadBoards: async function (userId) {
         const boards = await dataHandler.getBoards(userId);
         for (let board of boards) {
             const boardBuilder = htmlFactory(htmlTemplates.board);
@@ -18,10 +18,10 @@ export let boardsManager = {
                 showHideButtonHandler,
                 //true
             );
-            domManager.addEventListener(
+            await domManager.addEventListener(
                 `.board-add[data-board-id="${board.id}"]`,
                 "click",
-                () => {
+                async () => {
                     const createCardPopup = document.querySelector('#create-card');
                     localStorage.setItem('boardId', board.id);
                     if (userId === 0) {

@@ -82,9 +82,10 @@ def post_register_page():
                         'password': auth.hash_password(password_1)}
             queries.add_new_user(new_user)
             session['username'] = username
-            return jsonify({'url': request.root_url}), 200
-        return jsonify({'url': request.root_url}), 403
-    return jsonify({'url': request.root_url}), 409
+            user = queries.get_user_by_username(username)
+            return jsonify({'user_id': user['id']}), 200
+        return jsonify({'message': "Passwords do not match!"}), 403
+    return jsonify({'message': "User already exists!"}), 409
 
 
 @app.route('/login', methods=['POST'])
@@ -95,14 +96,14 @@ def post_login_page():
     user = queries.get_user_by_username(username)
     if user and auth.verify_password(password, user['password']):
         session['username'] = username
-        return jsonify({'url': request.root_url}), 200
-    return jsonify({'url': request.root_url}), 401
+        return jsonify({'user_id': user['id']}), 200
+    return jsonify({'message': 'Wrong credentials!'}), 401
 
 
 @app.route('/logout', methods=['POST'])
 def post_logout():
     session.pop('username', None)
-    return redirect(url_for('index'))
+    return jsonify({'message': 'Logged out successfully.'}), 200
 
 
 @app.route('/api/statuses')
