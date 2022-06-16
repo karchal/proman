@@ -122,7 +122,7 @@ registerForm.addEventListener('submit', event => {
 });
 
 if (createCardForm) {
-    createCardForm.addEventListener('submit', event => {
+    createCardForm.addEventListener('submit', async event => {
         event.preventDefault();
 
         const cardTitle = createCardTitle.value;
@@ -130,10 +130,7 @@ if (createCardForm) {
         const boardId = localStorage.getItem('boardId');
         localStorage.removeItem('boardId');
 
-        console.log(cardTitle);
-        console.log(cardStatus);
-        console.log(boardId);
-        cardsManager.createCard(cardTitle, boardId, cardStatus);
+        await cardsManager.createCard(cardTitle, boardId, cardStatus);
 
         createCardForm.reset();
         closePopup(createCardPopup);
@@ -152,13 +149,12 @@ if(addBoardButton) {
     addBoardButtonAddEvent();
 }
 
-addBoardPopup.addEventListener('submit', event => {
+addBoardPopup.addEventListener('submit', async event => {
     event.preventDefault();
 
     const boardTitle = addBoardTitle.value;
-    const userId = addBoardForm.userid.value;
-    dataHandler.createNewBoard(boardTitle, 'public', userId);
-    location.reload() // TODO add new board without reload
+    await boardsManager.createBoard(boardTitle, 'public', userId)
+    closePopup(addBoardPopup);
 });
 
 if (addPrivateBoardButton) {
@@ -167,13 +163,12 @@ if (addPrivateBoardButton) {
     });
 }
 
-addPrivateBoardPopup.addEventListener('submit', event => {
+addPrivateBoardPopup.addEventListener('submit', async event => {
     event.preventDefault();
 
     const boardTitle = addPrivateBoardTitle.value;
-    const userId = addPrivateBoardForm.userid.value;
-    dataHandler.createNewBoard(boardTitle, 'private', userId);
-    location.reload()  // TODO add new board without reload
+    await boardsManager.createBoard(boardTitle, 'private');
+    closePopup(addPrivateBoardPopup);
 });
 
 async function reRenderDomForLoggedUser() {

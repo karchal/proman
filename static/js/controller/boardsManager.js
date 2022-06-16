@@ -43,15 +43,20 @@ export let boardsManager = {
             }
             domManager.addEventListener(`.fas.fa-trash-alt.board[data-board-id="${board.id}"]`,
                 "click",
-                event => {
+                async () => {
                     if (confirm("Are you sure you want to delete this board?")) {
-                        dataHandler.deleteBoard(board.id, userId)
-                        location.reload();
-                    } else {
-                        alert('Operation aborted!')
+                        await dataHandler.deleteBoard(board.id, userId)
+                        const boardToRemove = document.querySelector(`.board[data-board-id="${board.id}"]`);
+                        boardToRemove.remove();
                     }
-                })
+                });
         }
+    },
+    createBoard: async function(boardTitle, public_private) {
+        await dataHandler.createNewBoard(boardTitle, public_private, userId);
+        const sectionsBoard = document.querySelectorAll('section.board');
+        sectionsBoard.forEach(section => section.remove());
+        await this.loadBoards(userId);
     },
 };
 

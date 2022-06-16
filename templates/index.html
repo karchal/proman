@@ -36,6 +36,8 @@
 <div class="navbar">
     <nav>
         {% if user %}
+            <button type="button" id="login-button" style="display: none;">Login</button>
+            <button type="button" id="register-button" style="display: none;">Register</button>
             <button type="submit" class="logout">LOGOUT</button>
         {% else %}
             <button type="button" id="login-button">Login</button>

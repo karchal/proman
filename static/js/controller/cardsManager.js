@@ -27,11 +27,13 @@ export let cardsManager = {
     },
     createCard: async function (cardTitle, boardId, statusId) {
         await dataHandler.createNewCard(cardTitle, boardId, statusId, userId);
-        location.reload(); // TODO add new card instead of reload
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => card.remove());
+        await this.loadCards(boardId);
     },
 };
 
-function deleteButtonHandler(clickEvent) {
+async function deleteButtonHandler(clickEvent) {
     let boardId
     if (clickEvent.target.parentElement.parentElement.hasAttribute('data-board-id')) {
         boardId = clickEvent.target.parentElement.parentElement.dataset.boardId;
@@ -40,9 +42,9 @@ function deleteButtonHandler(clickEvent) {
     }
     const cardId = clickEvent.target.parentElement.dataset.cardId;
     if (confirm('Are you sure want to delete that card?')) {
-        dataHandler.deleteCard(boardId, cardId, userId);
+        await dataHandler.deleteCard(boardId, cardId, userId);
+        clickEvent.target.parentElement.parentElement.remove();
     }
-    location.reload();  // TODO remove card without reloading
 }
 
 const saveNewCardTitle = async (submitEvent, event, card, newTitle, newTitleForm) => {
