@@ -244,3 +244,5 @@ function removeAllEventListeners(element) {
     element.parentNode.replaceChild(newElement, element);
     return newElement;
 }
+
+logoutButton.addEventListener('click', logout);
