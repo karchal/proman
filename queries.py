@@ -18,7 +18,7 @@ def get_card_status(status_id):
     return status
 
 
-def get_boards():
+def get_boards(user_id):
     """
     Gather all boards
     :return:
@@ -27,17 +27,16 @@ def get_boards():
     return data_manager.execute_select(
         """
         SELECT * FROM boards
-        ;
-        """
-    )
+        WHERE public = TRUE OR public = FALSE AND user_id = %(user_id)s;
+        """, variables={'user_id': user_id})
 
 
-def get_board(board_id):
+def get_board(user_id, board_id):
     return data_manager.execute_select(
         """
         SELECT * FROM boards
-        WHERE id = %(board_id)s;
-        """, variables={'board_id': board_id}, fetchall=False)
+        WHERE id = %(board_id)s AND public = TRUE OR id = %(board_id)s AND public = FALSE AND user_id = %(user_id)s;
+        """, variables={'user_id': user_id, 'board_id': board_id}, fetchall=False)
 
 
 def rename_board(board_id, board_title, user_id):
@@ -48,14 +47,15 @@ def rename_board(board_id, board_title, user_id):
         """, variables={'board_id': board_id, 'board_title': board_title, 'user_id': user_id})
 
 
-def get_cards_for_board(board_id):
+def get_cards_for_board(user_id, board_id):
     matching_cards = data_manager.execute_select(
         """
-        SELECT * FROM cards
-        WHERE cards.board_id = %(board_id)s
-        ;
-        """
-        , {"board_id": board_id})
+        SELECT cards.id, cards.board_id, cards.status_id, cards.title, cards.card_order, cards.user_id
+        FROM cards
+        JOIN boards on boards.id = cards.board_id
+        WHERE cards.board_id = %(board_id)s AND boards.public = TRUE
+            OR cards.board_id = %(board_id)s AND boards.public = FALSE AND boards.user_id = %(user_id)s
+        """, {"user_id": user_id, "board_id": board_id})
 
     return matching_cards
 

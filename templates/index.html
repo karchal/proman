@@ -45,6 +45,7 @@
         {% endif %}
     </nav>
 </div>
+
 <div class="board-container">
     {% if user %}
         <button type="button" id="add-board-button">Add new board</button>
@@ -63,6 +64,7 @@
         const userId = 0;
     </script>
 {% endif %}
+
 <script type="module" src="{{ url_for('static', filename='js/popup.js') }}"></script>
 </body>
 
