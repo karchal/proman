@@ -97,7 +97,7 @@ loginForm.addEventListener('submit', event => {
     })
         .then(response => response.json())
         .then(data => {
-            window.location.href = data['url'];
+            window.location.href = data['url'];  // TODO do not refresh page - re-render DOM
         })
         .catch(error => console.error(error));
 
@@ -125,7 +125,7 @@ registerForm.addEventListener('submit', event => {
     })
         .then(response => response.json())
         .then(data => {
-            window.location.href = data['url'];
+            window.location.href = data['url'];  // TODO do not refresh page - re-render DOM
         })
         .catch(error => console.error(error));
 
