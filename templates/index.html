@@ -36,33 +36,37 @@
 <div class="navbar">
     <nav>
         {% if user %}
-            <form action="{{ url_for('post_logout') }}" method="post">
-                <button type="submit">LOGOUT</button>
-            </form>
+            <button type="button" id="login-button" style="display: none;">Login</button>
+            <button type="button" id="register-button" style="display: none;">Register</button>
+            <button type="submit" class="logout">LOGOUT</button>
         {% else %}
             <button type="button" id="login-button">Login</button>
             <button type="button" id="register-button">Register</button>
+            <button type="submit" style="display: none" class="logout">LOGOUT</button>
         {% endif %}
     </nav>
 </div>
+
 <div class="board-container">
     {% if user %}
         <button type="button" id="add-board-button">Add new board</button>
         <button type="button" id="add-private-board-button">Add new private board</button>
     {% else %}
         <button type="button" id="add-board-button-login">Add new board</button>
+        <button type="button" id="add-private-board-button" style="display: none">Add new private board</button>
     {% endif %}
 </div>
 
 {% if user %}
     <script>
-        const userId = {{ user.id }};
+        let userId = {{ user.id }};
     </script>
 {% else %}
     <script>
-        const userId = 0;
+        let userId = 0;
     </script>
 {% endif %}
+
 <script type="module" src="{{ url_for('static', filename='js/popup.js') }}"></script>
 </body>
 

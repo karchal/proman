@@ -1,29 +1,30 @@
 export let dataHandler = {
-    getBoards: async function () {
-        return await apiGet("/api/boards");
+    getBoards: async function (userId) {
+        return await apiGet(`/api/users/${userId}/boards`);
     },
-    getBoard: async function (boardId) {
+    getBoard: async function (userId, boardId) {
         // the board is retrieved and then the callback function is called with the board
-        return await apiGet(`/api/boards/${boardId}`);
+        return await apiGet(`/api/users/${userId}/boards/${boardId}`);
     },
     getStatuses: async function () {
-        return await apiGet(`/api/statuses`)
+        return await apiGet(`/api/statuses`);
     },
     getStatus: async function (statusId) {
-        return await apiGet(`/api/statuses/${statusId}`)
+        return await apiGet(`/api/statuses/${statusId}`);
     },
-    getCardsByBoardId: async function (boardId) {
-        return await apiGet(`/api/boards/${boardId}/cards/`);
+    getCardsByBoardId: async function (userId, boardId) {
+        return await apiGet(`/api/users/${userId}/boards/${boardId}/cards/`);
     },
     getCard: async function (cardId) {
         // the card is retrieved and then the callback function is called with the card
     },
     createNewBoard: async function (boardTitle, public_private, userId) {
         // creates new board, saves it and calls the callback function with its data
-        return await apiPost(`/api/users/${userId}/boards`, {"boardTitle": boardTitle, "public_private": public_private})
+        return await apiPost(`/api/users/${userId}/boards`, {"boardTitle": boardTitle, "public_private": public_private});
     },
     createNewCard: async function (cardTitle, boardId, statusId, userId) {
         // creates new card, saves it and calls the callback function with its data
+        console.log(boardId)
         return await apiPost(`/api/users/${userId}/boards/${boardId}/cards`, {"cardTitle": cardTitle, "statusId": statusId});
     },
     renameBoard: async function (boardId, boardTitle, userId) {
@@ -34,7 +35,7 @@ export let dataHandler = {
     },
     deleteBoard: async function (boardId, userId) {
         // creates new board, saves it and calls the callback function with its data
-        return await apiDelete(`/api/users/${userId}/boards/${boardId}`)
+        return await apiDelete(`/api/users/${userId}/boards/${boardId}`);
     },
     renameCard: async function (boardId, cardId, cardTitle, userId) {
         await apiPatch(`/api/users/${userId}/boards/${boardId}/cards/${cardId}`, {"cardTitle": cardTitle});

@@ -3,7 +3,7 @@ from flask_cors import CORS
 from dotenv import load_dotenv
 
 import auth
-from util import json_response, user_logged_in
+from util import json_response
 import mimetypes
 import queries
 
@@ -24,19 +24,19 @@ def index():
                            all_statuses=all_statuses)
 
 
-@app.route("/api/boards")
+@app.route("/api/users/<int:user_id>/boards")
 @json_response
-def get_boards():
+def get_boards(user_id: int):
     """
     All the boards
     """
-    return queries.get_boards()
+    return queries.get_boards(user_id)
 
 
-@app.route("/api/boards/<int:board_id>")
+@app.route("/api/users/<int:user_id>/boards/<int:board_id>")
 @json_response
-def get_board(board_id: int):
-    return queries.get_board(board_id)
+def get_board(user_id: int, board_id: int):
+    return queries.get_board(user_id, board_id)
 
 
 @app.route("/api/users/<int:user_id>/boards/<int:board_id>", methods=['PATCH'])
@@ -46,14 +46,15 @@ def patch_rename_board(user_id: int, board_id: int):
     return queries.rename_board(board_id, board_title['boardTitle'], user_id)
 
 
-@app.route("/api/boards/<int:board_id>/cards/")
+@app.route("/api/users/<int:user_id>/boards/<int:board_id>/cards/")
 @json_response
-def get_cards_for_board(board_id: int):
+def get_cards_for_board(user_id: int, board_id: int):
     """
     All cards that belongs to a board
+    :param user_id: id of the current user
     :param board_id: id of the parent board
     """
-    return queries.get_cards_for_board(board_id)
+    return queries.get_cards_for_board(user_id, board_id)
 
 
 @app.route("/api/users/<int:user_id>/boards/<int:board_id>/cards", methods=['POST'])
@@ -81,9 +82,10 @@ def post_register_page():
                         'password': auth.hash_password(password_1)}
             queries.add_new_user(new_user)
             session['username'] = username
-            return jsonify({'url': request.root_url}), 200
-        return jsonify({'url': request.root_url}), 403
-    return jsonify({'url': request.root_url}), 409
+            user = queries.get_user_by_username(username)
+            return jsonify({'user_id': user['id']}), 200
+        return jsonify({'message': "Passwords do not match!"}), 403
+    return jsonify({'message': "User already exists!"}), 409
 
 
 @app.route('/login', methods=['POST'])
@@ -94,14 +96,14 @@ def post_login_page():
     user = queries.get_user_by_username(username)
     if user and auth.verify_password(password, user['password']):
         session['username'] = username
-        return jsonify({'url': request.root_url}), 200
-    return jsonify({'url': request.root_url}), 401
+        return jsonify({'user_id': user['id']}), 200
+    return jsonify({'message': 'Wrong credentials!'}), 401
 
 
 @app.route('/logout', methods=['POST'])
 def post_logout():
     session.pop('username', None)
-    return redirect(url_for('index'))
+    return jsonify({'message': 'Logged out successfully.'}), 200
 
 
 @app.route('/api/statuses')
