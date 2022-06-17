@@ -17,20 +17,7 @@ export let cardsManager = {
             domManager.addEventListener(
                 `.card-title[data-card-board-id="${card.board_id}"][data-card-id="${card.id}"]`,
                 "click",
-                event => {
-                    const title = event.target.innerText;
-                    event.target.outerHTML = `<form id="new-card-title-form" style="display: inline-block;" class="card-title"><input type="text" id="new-card-title" value="${title}"><button type="submit">save</button></form>`;
-                    const newTitleForm = document.querySelector('#new-card-title-form');
-                    const newTitle = document.querySelector('#new-card-title');
-                    newTitleForm.addEventListener('submit', submitEvent => {
-                        submitEvent.preventDefault();
-                        event.target.innerText = newTitle.value;
-                        newTitleForm.outerHTML = event.target.outerHTML;
-                        dataHandler.renameCard(card.board_id, card.id, newTitle.value, userId)
-                        newTitleForm.reset();
-                        location.reload();
-                    });
-                }
+                renameHandler
             )
             domManager.addEventListener(
                 `.card[data-card-id="${card.id}"]`,
@@ -63,6 +50,22 @@ function deleteButtonHandler(clickEvent) {
     }
     location.reload();
 }
+
+function renameHandler(event) {
+    const title = event.target.innerText;
+    event.target.outerHTML = `<form id="new-card-title-form" style="display: inline-block;" class="card-title"><input type="text" id="new-card-title" value="${title}"><button type="submit">save</button></form>`;
+    const newTitleForm = document.querySelector('#new-card-title-form');
+    const newTitle = document.querySelector('#new-card-title');
+    newTitleForm.addEventListener('submit', submitEvent => {
+        submitEvent.preventDefault();
+        event.target.innerText = newTitle.value;
+        newTitleForm.outerHTML = event.target.outerHTML;
+        dataHandler.renameCard(card.board_id, card.id, newTitle.value, userId)
+        newTitleForm.reset();
+        location.reload();
+    });
+}
+
 
 function dragStartHandler(dragStartEvent){
     dragStartEvent.target.classList.add("dragged");
