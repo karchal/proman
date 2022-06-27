@@ -52,13 +52,37 @@ export let boardsManager = {
                 });
         }
     },
-    createBoard: async function(boardTitle, public_private) {
+    createBoard: async function (boardTitle, public_private) {
         await dataHandler.createNewBoard(boardTitle, public_private, userId);
-        const sectionsBoard = document.querySelectorAll('section.board');
-        sectionsBoard.forEach(section => section.remove());
+        await this.reloadBoards();
+    },
+    reloadBoards: async function (userId) {
+        const boardsIdToLoad = checkForLoadedContent();
+
+        const boards = document.querySelectorAll('section.board');
+        boards.forEach(board => {
+            board.remove();
+        });
         await this.loadBoards(userId);
+
+        boardsIdToLoad.forEach(boardId => {
+            loadBoardContent(boardId);
+            domManager.toggleCSSClasses(`.fas[data-board-id="${boardId}"]`, 'fa-chevron-down', 'fa-chevron-up');
+        });
     },
 };
+
+function checkForLoadedContent() {
+    const openedBoardsId = [];
+    const boardsContent = document.querySelectorAll('div.board-columns');
+    boardsContent.forEach(boardContent => {
+        if(boardContent.hasChildNodes()) {
+            openedBoardsId.push(boardContent.dataset.boardId);
+            boardContent.innerHTML = '';
+        }
+    });
+    return openedBoardsId
+}
 
 function showHideButtonHandler(clickEvent) {
     const boardId = clickEvent.target.dataset.boardId;
@@ -72,7 +96,7 @@ function showHideButtonHandler(clickEvent) {
 
 async function loadBoardContent(boardId) {
     await columnsManager.loadColumns(boardId);
-    cardsManager.loadCards(boardId);
+    await cardsManager.loadCards(boardId);
 }
 
 const saveNewBoardTitle = async (submitEvent, event, board, newTitle, newTitleForm) => {
