@@ -38,9 +38,9 @@ function boardBuilder(board) {
 }
 
 function cardBuilder(card) {
-    let cardComponent = `<div class="card" data-card-id="${card.id}" draggable="true">`;
-    cardComponent += (card.user_id === userId) ? `<div class="card-remove" data-card-id="${card.id}"><i class="fas fa-trash-alt"></i></div>` : ``;
-    cardComponent += `<div class="card-title" data-card-board-id="${card.board_id}" data-card-id="${card.id}">${card.title}</div></div>`;
+    let cardComponent = `<div class="card" data-card-id="${card.id}" data-card-board-id="${card.board_id}">`;
+    cardComponent += (card.user_id === userId) ? `<div class="card-remove" data-card-id="${card.id}" data-card-board-id="${card.board_id}"><i class="fas fa-trash-alt" data-card-board-id="${card.board_id}"></i></div>` : ``;
+    cardComponent += `<div class="card-title" data-card-board-id="${card.board_id}" data-card-id="${card.id}">${card.title}</div>`;
     return cardComponent;
 }
 
