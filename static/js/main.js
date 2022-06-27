@@ -8,12 +8,6 @@ function init() {
     refreshButton.addEventListener('click', () => {
         boardsManager.reloadBoards(userId);
     });
-
-    //auto sync
-    const minute = 60000;
-    setInterval(() => {
-        boardsManager.reloadBoards(userId);
-    }, minute);
 }
 
 init();
