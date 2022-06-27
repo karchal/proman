@@ -55,6 +55,7 @@ def get_cards_for_board(user_id, board_id):
         JOIN boards on boards.id = cards.board_id
         WHERE cards.board_id = %(board_id)s AND boards.public = TRUE
             OR cards.board_id = %(board_id)s AND boards.public = FALSE AND boards.user_id = %(user_id)s
+        ORDER BY cards.card_order
         """, {"user_id": user_id, "board_id": board_id})
 
     return matching_cards

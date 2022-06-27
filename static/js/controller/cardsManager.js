@@ -33,6 +33,26 @@ export let cardsManager = {
                 "dragend",
                 dragEndHandler
             )
+            domManager.addEventListener(
+                `.card[data-card-id="${card.id}"]`,
+                "dragenter",
+                dragEnterHandler
+            )
+            domManager.addEventListener(
+                `.card[data-card-id="${card.id}"]`,
+                "dragover",
+                dragOverHandler
+            )
+            domManager.addEventListener(
+                `.card[data-card-id="${card.id}"]`,
+                "dragover",
+                dragLeaveHandler
+            )
+            domManager.addEventListener(
+                `.card[data-card-id="${card.id}"]`,
+                "drop",
+                dropHandler
+            )
         }
     },
     createCard: async function (cardTitle, boardId, statusId) {
@@ -89,3 +109,14 @@ function dragEndHandler(dragEndEvent){
     dragEndEvent.target.classList.remove("dragged");
 }
 
+
+function dragEnterHandler(dragEnterEvent) {
+    dragEnterEvent.target.classList.add("drop-zone")
+}
+function dragOverHandler(dragOverEvent) {
+}
+function dragLeaveHandler(dragLeaveEvent) {
+    dragLeaveEvent.target.classList.remove("drop-zone")
+}
+function dropHandler(dragLeaveEvent) {
+}
