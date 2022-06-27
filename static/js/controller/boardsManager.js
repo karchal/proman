@@ -4,6 +4,7 @@ import {domManager} from "../view/domManager.js";
 import {cardsManager} from "./cardsManager.js";
 import {showPopup} from "../popup.js";
 import {columnsManager} from "./columnsManager.js";
+import {socket} from "../main.js";
 
 export let boardsManager = {
     loadBoards: async function (userId) {
@@ -36,25 +37,22 @@ export let boardsManager = {
                 domManager.addEventListener(
                     `.board-title[data-board-id="${board.id}"]`,
                     "click",
-                    event => {
-                        renameBoardTitle(event, board);
+                    async event => {
+                        await renameBoardTitle(event, board);
                     }
                 );
             }
             domManager.addEventListener(`.fas.fa-trash-alt.board[data-board-id="${board.id}"]`,
                 "click",
                 async () => {
-                    if (confirm("Are you sure you want to delete this board?")) {
-                        await dataHandler.deleteBoard(board.id, userId)
-                        const boardToRemove = document.querySelector(`.board[data-board-id="${board.id}"]`);
-                        boardToRemove.remove();
-                    }
+                    await removeBoard(board);
+                    socket.send('a');
                 });
         }
     },
     createBoard: async function (boardTitle, public_private) {
         await dataHandler.createNewBoard(boardTitle, public_private, userId);
-        await this.reloadBoards();
+        socket.send('a');
     },
     reloadBoards: async function (userId) {
         const boardsIdToLoad = checkForLoadedContent();
@@ -72,11 +70,19 @@ export let boardsManager = {
     },
 };
 
+async function removeBoard(board) {
+    if (confirm("Are you sure you want to delete this board?")) {
+        await dataHandler.deleteBoard(board.id, userId)
+        const boardToRemove = document.querySelector(`.board[data-board-id="${board.id}"]`);
+        boardToRemove.remove();
+    }
+}
+
 function checkForLoadedContent() {
     const openedBoardsId = [];
     const boardsContent = document.querySelectorAll('div.board-columns');
     boardsContent.forEach(boardContent => {
-        if(boardContent.hasChildNodes()) {
+        if (boardContent.hasChildNodes()) {
             openedBoardsId.push(boardContent.dataset.boardId);
             boardContent.innerHTML = '';
         }
@@ -108,8 +114,8 @@ const saveNewBoardTitle = async (submitEvent, event, board, newTitle, newTitleFo
     domManager.addEventListener(
         `.board-title[data-board-id="${board.id}"]`,
         "click",
-        event => {
-            renameBoardTitle(event, board);
+        async event => {
+            await renameBoardTitle(event, board);
         }
     );
 };
@@ -122,8 +128,10 @@ async function renameBoardTitle(event, board) {
     newTitle.focus();
     newTitleForm.addEventListener('submit', async submitEvent => {
         await saveNewBoardTitle(submitEvent, event, board, newTitle, newTitleForm);
+        socket.send('a');
     });
     newTitleForm.addEventListener('focusout', async submitEvent => {
         await saveNewBoardTitle(submitEvent, event, board, newTitle, newTitleForm);
+        socket.send('a');
     });
 }
