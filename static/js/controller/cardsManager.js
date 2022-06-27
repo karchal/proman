@@ -34,12 +34,7 @@ export let cardsManager = {
 };
 
 async function deleteButtonHandler(clickEvent) {
-    let boardId
-    if (clickEvent.target.parentElement.parentElement.hasAttribute('data-board-id')) {
-        boardId = clickEvent.target.parentElement.parentElement.dataset.boardId;
-    } else {
-        boardId = clickEvent.target.parentElement.parentElement.parentElement.dataset.boardId;
-    }
+    const boardId = clickEvent.target.parentElement.dataset.cardBoardId;
     const cardId = clickEvent.target.parentElement.dataset.cardId;
     if (confirm('Are you sure want to delete that card?')) {
         await dataHandler.deleteCard(boardId, cardId, userId);
