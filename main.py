@@ -1,5 +1,5 @@
-from flask import Flask, render_template, url_for, redirect, session, request, jsonify
-from flask_socketio import SocketIO, send
+from flask import Flask, render_template, url_for, session, request, jsonify
+from flask_socketio import SocketIO
 from flask_cors import CORS
 from dotenv import load_dotenv
 
@@ -93,7 +93,7 @@ def post_register_page():
             queries.add_new_user(new_user)
             session['username'] = username
             user = queries.get_user_by_username(username)
-            return jsonify({'user_id': user['id']}), 200
+            return jsonify({'user_id': user['id'], 'message': 'Successfully registered, You are now logged in.'}), 200
         return jsonify({'message': "Passwords do not match!"}), 403
     return jsonify({'message': "User already exists!"}), 409
 
@@ -106,7 +106,7 @@ def post_login_page():
     user = queries.get_user_by_username(username)
     if user and auth.verify_password(password, user['password']):
         session['username'] = username
-        return jsonify({'user_id': user['id']}), 200
+        return jsonify({'user_id': user['id'], 'message': 'Successfully logged in.'}), 200
     return jsonify({'message': 'Wrong credentials!'}), 401
 
 
@@ -148,6 +148,18 @@ def patch_rename_card(user_id: int, board_id: int, card_id: int):
     return queries.rename_card(board_id, card_id, new_card_title['cardTitle'], user_id)
 
 
+@app.route("/api/users/<int:user_id>/boards/<int:board_id>/cards/<int:card_id>/archive", methods=['PATCH'])
+@json_response
+def patch_archive_card(user_id: int, board_id: int, card_id: int):
+    return queries.archive_card(board_id, card_id, user_id)
+
+
+@app.route("/api/users/<int:user_id>/boards/<int:board_id>/cards/archived")
+@json_response
+def get_archived_cards_for_board(user_id: int, board_id: int):
+    return queries.get_archived_cards_for_board(user_id, board_id)
+
+
 @socketio.on('message')
 def handle_msg(msg):
     socketio.send('Syncing...')
@@ -155,7 +167,7 @@ def handle_msg(msg):
 
 def main():
     # app.run(debug=True)
-    socketio.run(app)
+    socketio.run(app, debug=True)
 
     # Serving the favicon
     with app.app_context():

@@ -15,6 +15,9 @@ export let dataHandler = {
     getCardsByBoardId: async function (userId, boardId) {
         return await apiGet(`/api/users/${userId}/boards/${boardId}/cards/`);
     },
+    getArchivedCardsByBoardId: async function (userId, boardId) {
+        return await apiGet(`/api/users/${userId}/boards/${boardId}/cards/archived`);
+    },
     getCard: async function (cardId) {
         // the card is retrieved and then the callback function is called with the card
     },
@@ -35,6 +38,9 @@ export let dataHandler = {
     },
     deleteCard: async function (boardId, cardId, userId) {
         return await apiDelete(`/api/users/${userId}/boards/${boardId}/cards/${cardId}`);
+    },
+    archiveCard: async function (boardId, cardId, userId) {
+        return await apiPatch(`/api/users/${userId}/boards/${boardId}/cards/${cardId}/archive`);
     },
     deleteBoard: async function (boardId, userId) {
         // creates new board, saves it and calls the callback function with its data
@@ -79,7 +85,7 @@ async function apiDelete(url) {
 async function apiPut(url) {
 }
 
-async function apiPatch(url, payload) {
+async function apiPatch(url, payload={"message": "empty"}) {
     let response = await fetch(url, {
         method: "PATCH",
         headers: {

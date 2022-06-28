@@ -19,20 +19,18 @@ export let boardsManager = {
                 showHideButtonHandler,
                 //true
             );
+            domManager.addEventListener(
+                `.board-toggle-archived[data-board-id="${board.id}"]`,
+                "click",
+                showHideArchivedButtonHandler,
+                //true
+            );
             await domManager.addEventListener(
                 `.board-add[data-board-id="${board.id}"]`,
                 "click",
-                async () => {
-                    const createCardPopup = document.querySelector('#create-card');
-                    localStorage.setItem('boardId', board.id);
-                    if (userId === 0) {
-                        const loginPopup = document.querySelector('#login-popup');
-                        showPopup(loginPopup);
-                    } else {
-                        showPopup(createCardPopup);
-                    }
-                }
-            );
+                () => {
+                    showLoginForm(board)
+                });
             if (board.user_id === userId) {
                 domManager.addEventListener(
                     `.board-title[data-board-id="${board.id}"]`,
@@ -70,6 +68,17 @@ export let boardsManager = {
     },
 };
 
+function showLoginForm(board) {
+    const createCardPopup = document.querySelector('#create-card');
+    localStorage.setItem('boardId', board.id);
+    if (userId === 0) {
+        const loginPopup = document.querySelector('#login-popup');
+        showPopup(loginPopup);
+    } else {
+        showPopup(createCardPopup);
+    }
+}
+
 async function removeBoard(board) {
     if (confirm("Are you sure you want to delete this board?")) {
         await dataHandler.deleteBoard(board.id, userId)
@@ -100,9 +109,24 @@ function showHideButtonHandler(clickEvent) {
     domManager.toggleCSSClasses(`.fas[data-board-id="${boardId}"]`, 'fa-chevron-down', 'fa-chevron-up');
 }
 
+function showHideArchivedButtonHandler(clickEvent) {
+    const boardId = clickEvent.target.dataset.boardId;
+    if (domManager.hasChild(`.board-columns[data-board-id="${boardId}"]`)) {
+        domManager.removeAllChildren(`.board-columns[data-board-id="${boardId}"]`);
+    } else {
+        loadBoardContentArchived(boardId);
+    }
+    domManager.toggleCSSClasses(`.fas[data-board-id="${boardId}"]`, 'fa-chevron-down', 'fa-chevron-up');
+}
+
 async function loadBoardContent(boardId) {
     await columnsManager.loadColumns(boardId);
     await cardsManager.loadCards(boardId);
+}
+
+async function loadBoardContentArchived(boardId) {
+    await columnsManager.loadColumns(boardId);
+    await cardsManager.loadCards(boardId, true);
 }
 
 const saveNewBoardTitle = async (submitEvent, event, board, newTitle, newTitleForm) => {
