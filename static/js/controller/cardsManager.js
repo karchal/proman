@@ -1,6 +1,7 @@
 import {dataHandler} from "../data/dataHandler.js";
 import {htmlFactory, htmlTemplates} from "../view/htmlFactory.js";
 import {domManager} from "../view/domManager.js";
+import {socket} from "../main.js";
 
 export let cardsManager = {
     loadCards: async function (boardId) {
@@ -32,6 +33,7 @@ export let cardsManager = {
         const cards = document.querySelectorAll('.card');
         cards.forEach(card => card.remove());
         await this.loadCards(boardId);
+        socket.send('a');
     },
 };
 
@@ -41,6 +43,7 @@ async function deleteButtonHandler(clickEvent) {
     if (confirm('Are you sure want to delete that card?')) {
         await dataHandler.deleteCard(boardId, cardId, userId);
         clickEvent.target.parentElement.parentElement.remove();
+        socket.send('a');
     }
 }
 
@@ -67,9 +70,11 @@ async function renameCardTitle(event, card) {
     newTitle.focus();
     newTitleForm.addEventListener('submit', async submitEvent => {
         await saveNewCardTitle(submitEvent, event, card, newTitle, newTitleForm);
+        socket.send('a');
     });
     newTitleForm.addEventListener('focusout', async submitEvent => {
         await saveNewCardTitle(submitEvent, event, card, newTitle, newTitleForm);
+        socket.send('a');
     });
 }
 
