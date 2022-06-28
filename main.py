@@ -73,7 +73,6 @@ def patch_update_cards_for_board(user_id: int, board_id: int):
     return queries.update_cards(board_id, user_id, cards_details)
 
 
-
 @app.route("/api/users/<int:user_id>/boards/<int:board_id>/cards/<int:card_id>", methods=['DELETE'])
 @json_response
 def delete_card_from_board(user_id: int, board_id: int, card_id: int):

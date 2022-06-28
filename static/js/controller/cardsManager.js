@@ -4,9 +4,9 @@ import {domManager} from "../view/domManager.js";
 import {socket} from "../main.js";
 
 export let cardsManager = {
-    loadCards: async function (boardId, archived=false) {
+    loadCards: async function (boardId, archived = false) {
         let cards;
-        if(archived === true){
+        if (archived === true) {
             cards = await dataHandler.getArchivedCardsByBoardId(userId, boardId);
         } else {
             cards = await dataHandler.getCardsByBoardId(userId, boardId);
@@ -15,17 +15,17 @@ export let cardsManager = {
             const cardBuilder = htmlFactory(htmlTemplates.card);
             const content = cardBuilder(card);
             domManager.addChild(`.board-column-content[data-column-id="${card.status_id}"][data-board-id="${boardId}"]`, content)
-            domManager.addEventListener(
-                `.card-remove[data-card-id="${card.id}"]`,
-                "click",
-                deleteButtonHandler
-            );
-            domManager.addEventListener(
-                `.card-archive[data-card-id="${card.id}"]`,
-                "click",
-                archiveButtonHandler
-            );
             if (card.user_id === userId) {
+                domManager.addEventListener(
+                    `.card-remove[data-card-id="${card.id}"]`,
+                    "click",
+                    deleteButtonHandler
+                );
+                domManager.addEventListener(
+                    `.card-archive[data-card-id="${card.id}"]`,
+                    "click",
+                    archiveButtonHandler
+                );
                 domManager.addEventListener(
                     `.card-title[data-card-board-id="${card.board_id}"][data-card-id="${card.id}"]`,
                     "click",
@@ -33,8 +33,8 @@ export let cardsManager = {
                         renameCardTitle(event, card);
                     }
                 );
-            };
-        initDragAndDrop(boardId, cards);
+            }
+            initDragAndDrop(boardId, cards);
         }
     },
     createCard: async function (cardTitle, boardId, statusId) {
@@ -114,7 +114,9 @@ function initDragAndDrop(boardId, cardsFromDB) {
                 card.classList.add("drop-zone");
             }
         };
-        card.ondragover = (e) => { e.preventDefault(); }
+        card.ondragover = (e) => {
+            e.preventDefault();
+        }
         card.ondragleave = () => {
             if (card !== current) {
                 card.classList.remove("drop-zone");
@@ -127,7 +129,7 @@ function initDragAndDrop(boardId, cardsFromDB) {
                 let [dropStatus, dropOrder] = get_card_status_and_order(card.dataset.cardId, cardsFromDB);
                 if (currentStatus === dropStatus && currentOrder < dropOrder) {
                     card.parentElement.insertBefore(current, card.nextSibling);
-                    update_cards(cardsFromDB, )
+                    update_cards(cardsFromDB,)
 
                 } else {
                     card.parentElement.insertBefore(current, card);
@@ -138,7 +140,7 @@ function initDragAndDrop(boardId, cardsFromDB) {
 }
 
 function get_card_status_and_order(card_id, cards) {
-    for (let card of cards){
+    for (let card of cards) {
         if (card.id == card_id) {
             return [card.status_id, card.card_order];
         }

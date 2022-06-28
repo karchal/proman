@@ -39,13 +39,13 @@ export let boardsManager = {
                         await renameBoardTitle(event, board);
                     }
                 );
+                domManager.addEventListener(`.fas.fa-trash-alt.board[data-board-id="${board.id}"]`,
+                    "click",
+                    async () => {
+                        await removeBoard(board);
+                        socket.send('a');
+                    });
             }
-            domManager.addEventListener(`.fas.fa-trash-alt.board[data-board-id="${board.id}"]`,
-                "click",
-                async () => {
-                    await removeBoard(board);
-                    socket.send('a');
-                });
         }
     },
     createBoard: async function (boardTitle, public_private) {
