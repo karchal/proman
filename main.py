@@ -140,6 +140,18 @@ def patch_rename_card(user_id: int, board_id: int, card_id: int):
     return queries.rename_card(board_id, card_id, new_card_title['cardTitle'], user_id)
 
 
+@app.route("/api/users/<int:user_id>/boards/<int:board_id>/cards/<int:card_id>/archive", methods=['PATCH'])
+@json_response
+def patch_archive_card(user_id: int, board_id: int, card_id: int):
+    return queries.archive_card(board_id, card_id, user_id)
+
+
+@app.route("/api/users/<int:user_id>/boards/<int:board_id>/cards/archived")
+@json_response
+def get_archived_cards_for_board(user_id: int, board_id: int):
+    return queries.get_archived_cards_for_board(user_id, board_id)
+
+
 @socketio.on('message')
 def handle_msg(msg):
     socketio.send('Syncing...')

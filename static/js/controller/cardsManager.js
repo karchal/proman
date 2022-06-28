@@ -4,8 +4,13 @@ import {domManager} from "../view/domManager.js";
 import {socket} from "../main.js";
 
 export let cardsManager = {
-    loadCards: async function (boardId) {
-        const cards = await dataHandler.getCardsByBoardId(userId, boardId);
+    loadCards: async function (boardId, archived=false) {
+        let cards;
+        if(archived === true){
+            cards = await dataHandler.getArchivedCardsByBoardId(userId, boardId);
+        } else {
+            cards = await dataHandler.getCardsByBoardId(userId, boardId);
+        }
         for (let card of cards) {
             const cardBuilder = htmlFactory(htmlTemplates.card);
             const content = cardBuilder(card);
@@ -14,6 +19,11 @@ export let cardsManager = {
                 `.card-remove[data-card-id="${card.id}"]`,
                 "click",
                 deleteButtonHandler
+            );
+            domManager.addEventListener(
+                `.card-archive[data-card-id="${card.id}"]`,
+                "click",
+                archiveButtonHandler
             );
             if (card.user_id === userId) {
                 domManager.addEventListener(
@@ -44,6 +54,15 @@ export let cardsManager = {
         socket.send('a');
     },
 };
+
+async function archiveButtonHandler(clickEvent) {
+    const boardId = clickEvent.target.parentElement.dataset.cardBoardId;
+    const cardId = clickEvent.target.parentElement.dataset.cardId;
+    if (confirm('Are you sure want to archive/unarchive that card?')) {
+        await dataHandler.archiveCard(boardId, cardId, userId);
+        socket.send('a');
+    }
+}
 
 async function deleteButtonHandler(clickEvent) {
     const boardId = clickEvent.target.parentElement.dataset.cardBoardId;
