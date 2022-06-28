@@ -1,5 +1,5 @@
-from flask import Flask, render_template, url_for, redirect, session, request, jsonify, flash
-from flask_socketio import SocketIO, send
+from flask import Flask, render_template, url_for, session, request, jsonify
+from flask_socketio import SocketIO
 from flask_cors import CORS
 from dotenv import load_dotenv
 
