@@ -27,6 +27,10 @@ export let dataHandler = {
         console.log(boardId)
         return await apiPost(`/api/users/${userId}/boards/${boardId}/cards`, {"cardTitle": cardTitle, "statusId": statusId});
     },
+    updateCards: async function (boardId, userId, cards) {
+        // updates status and/or order after a card was dragged and dropped for all neighbor cards
+        return await apiPost(`/api/users/${userId}/boards/${boardId}/cards`, {"cards": cards});
+    },
     renameBoard: async function (boardId, boardTitle, userId) {
         return await apiPatch(`/api/users/${userId}/boards/${boardId}`, {"boardTitle": boardTitle});
     },

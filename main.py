@@ -64,6 +64,14 @@ def post_create_card_for_board(user_id: int, board_id: int):
     return queries.create_new_card(board_id, card_details, user_id)
 
 
+@app.route("/api/users/<int:user_id>/boards/<int:board_id>/cards", methods=['PATCH'])
+@json_response
+def patch_update_cards_for_board(user_id: int, board_id: int):
+    cards_details = request.get_json()
+    return queries.update_cards(board_id, user_id, cards_details)
+
+
+
 @app.route("/api/users/<int:user_id>/boards/<int:board_id>/cards/<int:card_id>", methods=['DELETE'])
 @json_response
 def delete_card_from_board(user_id: int, board_id: int, card_id: int):

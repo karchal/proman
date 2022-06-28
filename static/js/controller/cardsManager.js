@@ -5,6 +5,7 @@ import {domManager} from "../view/domManager.js";
 export let cardsManager = {
     loadCards: async function (boardId) {
         const cards = await dataHandler.getCardsByBoardId(userId, boardId);
+        console.log(cards);
         for (let card of cards) {
             const cardBuilder = htmlFactory(htmlTemplates.card);
             const content = cardBuilder(card);
@@ -22,37 +23,8 @@ export let cardsManager = {
                         renameCardTitle(event, card);
                     }
                 );
-            }
-            domManager.addEventListener(
-                `.card[data-card-id="${card.id}"]`,
-                "dragstart",
-                dragStartHandler
-            )
-            domManager.addEventListener(
-                `.card[data-card-id="${card.id}"]`,
-                "dragend",
-                dragEndHandler
-            )
-            domManager.addEventListener(
-                `.card[data-card-id="${card.id}"]`,
-                "dragenter",
-                dragEnterHandler
-            )
-            domManager.addEventListener(
-                `.card[data-card-id="${card.id}"]`,
-                "dragover",
-                dragOverHandler
-            )
-            domManager.addEventListener(
-                `.card[data-card-id="${card.id}"]`,
-                "dragover",
-                dragLeaveHandler
-            )
-            domManager.addEventListener(
-                `.card[data-card-id="${card.id}"]`,
-                "drop",
-                dropHandler
-            )
+            };
+        initDragAndDrop(boardId, cards);
         }
     },
     createCard: async function (cardTitle, boardId, statusId) {
@@ -101,22 +73,51 @@ async function renameCardTitle(event, card) {
     });
 }
 
-function dragStartHandler(dragStartEvent){
-    dragStartEvent.target.classList.add("dragged");
+function initDragAndDrop(boardId, cardsFromDB) {
+    let current = null;
+    let cards = document.querySelectorAll(`.card[data-card-board-id="${boardId}"]`);
+    for (let card of cards) {
+        card.ondragstart = (e) => {
+            current = card;
+            console.log(current);
+            card.classList.add("dragged");
+        };
+        card.ondragend = () => {
+            card.classList.remove("dragged");
+            current = null;
+        };
+        card.ondragenter = () => {
+            if (card !== current) {
+                card.classList.add("drop-zone");
+            }
+        };
+        card.ondragover = (e) => { e.preventDefault(); }
+        card.ondragleave = () => {
+            if (card !== current) {
+                card.classList.remove("drop-zone");
+            }
+        };
+        card.ondrop = (e) => {
+            e.preventDefault();
+            if (card !== current) {
+                let [currentStatus, currentOrder] = get_card_status_and_order(current.dataset.cardId, cardsFromDB);
+                let [dropStatus, dropOrder] = get_card_status_and_order(card.dataset.cardId, cardsFromDB);
+                if (currentStatus === dropStatus && currentOrder < dropOrder) {
+                    card.parentElement.insertBefore(current, card.nextSibling);
+                    update_cards(cardsFromDB, )
+
+                } else {
+                    card.parentElement.insertBefore(current, card);
+                }
+            }
+        };
+    }
 }
 
-function dragEndHandler(dragEndEvent){
-    dragEndEvent.target.classList.remove("dragged");
-}
-
-
-function dragEnterHandler(dragEnterEvent) {
-    dragEnterEvent.target.classList.add("drop-zone")
-}
-function dragOverHandler(dragOverEvent) {
-}
-function dragLeaveHandler(dragLeaveEvent) {
-    dragLeaveEvent.target.classList.remove("drop-zone")
-}
-function dropHandler(dragLeaveEvent) {
+function get_card_status_and_order(card_id, cards) {
+    for (let card of cards){
+        if (card.id == card_id) {
+            return [card.status_id, card.card_order];
+        }
+    }
 }
