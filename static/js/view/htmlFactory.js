@@ -30,6 +30,7 @@ function boardBuilder(board) {
                     <button class="board-toggle" data-board-id="${board.id}">
                         <i class="fas fa-chevron-down" data-board-id="${board.id}"></i>
                     </button>
+                    <button class="board-add-column" data-board-id="${board.id}">Add Column</button>
                     <button class="board-toggle-archived" data-board-id="${board.id}">Show archived</button>`;
     boardComponent += (board.user_id === userId) ? `<button class="fas fa-trash-alt board" data-board-id="${board.id}"></button>` : ``;
     boardComponent += `</div>

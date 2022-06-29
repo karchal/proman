@@ -1,10 +1,11 @@
-import {dataHandler} from "../data/dataHandler.js";
-import {htmlFactory, htmlTemplates} from "../view/htmlFactory.js";
-import {domManager} from "../view/domManager.js";
+import { dataHandler } from "../data/dataHandler.js";
+import { htmlFactory, htmlTemplates } from "../view/htmlFactory.js";
+import { domManager } from "../view/domManager.js";
+import { boardsManager } from "./boardsManager.js";
 
 export let columnsManager = {
     loadColumns: async function (boardId) {
-        const columns = await dataHandler.getStatuses();
+        const columns = await dataHandler.getStatuses(boardId);
         for (let column in columns) {
             column = columns[column];
             const columnBuilder = htmlFactory(htmlTemplates.column);
@@ -31,7 +32,11 @@ export let columnsManager = {
                 dropHandler
             )
         }
-    }
+    },
+    createColumn: async function (columnTitle, boardId) {
+        await dataHandler.createColumn(boardId, columnTitle);
+        await boardsManager.reloadBoards(userId);
+    },
 }
 
 function dragEnterHandler(dragEnterEvent) {
