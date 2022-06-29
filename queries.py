@@ -162,6 +162,13 @@ def get_statuses(board_id=0):
         """, variables={'board_id': board_id})
 
 
+def remove_column(board_id, column_id):
+    data_manager.execute_statement(
+        """DELETE FROM statuses CASCADE
+        WHERE bound_to_board = %(board_id)s AND id = %(column_id)s
+        """, variables={'board_id': board_id, 'column_id': column_id})
+
+
 def create_new_column(board_id, column_title):
     data_manager.execute_statement(
         """INSERT INTO statuses(title, bound_to_board)

@@ -42,8 +42,8 @@ let sectionsBoard;
 
 const logoutButton = document.querySelector('.logout');
 
-const flashes = document.querySelector('.flashes');
-const flashList = document.querySelector('.flash');
+export const flashes = document.querySelector('.flashes');
+export const flashList = document.querySelector('.flash');
 
 export const showPopup = element => {
     element.classList.add('fade-in');

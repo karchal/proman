@@ -127,10 +127,19 @@ def get_status(status_id):
 
 
 @app.route('/api/statuses/<int:board_id>', methods=['POST'])
-@json_response
 def post_new_status(board_id):
     data = request.get_json()
     queries.create_new_column(board_id, data['columnTitle'])
+
+
+@app.route('/api/statuses/<int:board_id>', methods=['DELETE'])
+def delete_status(board_id):
+    data = request.get_json()
+    if int(data['columnId']) > 4:
+        queries.remove_column(board_id, data['columnId'])
+        return jsonify({'message': 'Successfully removed.'})
+    else:
+        return jsonify({'message': 'You cannot remove this column'})
 
 
 @app.route("/api/users/<int:user_id>/boards", methods=["POST"])

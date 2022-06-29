@@ -1,10 +1,10 @@
-import { dataHandler } from "../data/dataHandler.js";
-import { htmlFactory, htmlTemplates } from "../view/htmlFactory.js";
-import { domManager } from "../view/domManager.js";
-import { cardsManager } from "./cardsManager.js";
-import { showPopup, loginPopup, createCardPopup, createCardStatus, createColumnPopup } from "../popup.js";
-import { columnsManager } from "./columnsManager.js";
-import { socket } from "../main.js";
+import {dataHandler} from "../data/dataHandler.js";
+import {htmlFactory, htmlTemplates} from "../view/htmlFactory.js";
+import {domManager} from "../view/domManager.js";
+import {cardsManager} from "./cardsManager.js";
+import {showPopup, loginPopup, createCardPopup, createCardStatus, createColumnPopup} from "../popup.js";
+import {columnsManager} from "./columnsManager.js";
+import {socket} from "../main.js";
 
 export let boardsManager = {
     loadBoards: async function (userId) {

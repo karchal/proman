@@ -48,7 +48,8 @@ function cardBuilder(card) {
 
 function columnBuilder(column, boardId) {
     return `<div class="board-column" data-column-id="${column.id}" data-board-id="${boardId}">
-                <div class="board-column-title">${column.title}</div>
-                <div class="board-column-content" data-column-id="${column.id}" data-board-id="${boardId}"> </div>
+                <div class="board-column-title" data-column-id="${column.id}" data-board-id="${boardId}">${column.title}</div>
+                <div class="board-column-remove" data-column-id="${column.id}" data-board-id="${boardId}"><div class="tooltip"><span class="tooltiptext" data-column-id="${column.id}" data-board-id="${boardId}">Remove</span><i class="fa-solid fa-circle-xmark" data-column-id="${column.id}" data-board-id="${boardId}"></i></div></div>
+                <div class="board-column-content" data-column-id="${column.id}" data-board-id="${boardId}"></div>
             </div>`
 }
