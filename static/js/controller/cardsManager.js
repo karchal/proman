@@ -5,52 +5,53 @@ import {socket} from "../main.js";
 import {flashes, flashList, showPopup} from "../popup.js";
 
 export let cardsManager = {
-    loadCards: async function (boardId, archived = false) {
-        let cards;
-        if (archived === true) {
-            cards = await dataHandler.getArchivedCardsByBoardId(userId, boardId);
-        } else {
-            cards = await dataHandler.getCardsByBoardId(userId, boardId);
-        }
-        for (let card of cards) {
-            const cardBuilder = htmlFactory(htmlTemplates.card);
-            const content = cardBuilder(card);
-            domManager.addChild(`.board-column-content[data-column-id="${card.status_id}"][data-board-id="${boardId}"]`, content)
-            if (card.user_id === userId) {
-                domManager.addEventListener(
-                    `.card-remove[data-card-id="${card.id}"]`,
-                    "click",
-                    deleteButtonHandler
-                );
-                domManager.addEventListener(
-                    `.card-archive[data-card-id="${card.id}"]`,
-                    "click",
-                    archiveButtonHandler
-                );
-                domManager.addEventListener(
-                    `.card-title[data-card-board-id="${card.board_id}"][data-card-id="${card.id}"]`,
-                    "click",
-                    event => {
-                        renameCardTitle(event, card);
-                    }
-                );
+        loadCards: async function (boardId, archived = false) {
+            let cards;
+            if (archived === true) {
+                cards = await dataHandler.getArchivedCardsByBoardId(userId, boardId);
+            } else {
+                cards = await dataHandler.getCardsByBoardId(userId, boardId);
             }
-        }
-    },
-    initDragAndDrop: function (boardId) {
-        let current = null;
-        let cards = document.querySelectorAll(`.card[data-card-board-id="${boardId}"]`);
-        for (let card of cards) {
-            card.ondragstart = (e) => {
-                current = card;
-                card.classList.add("dragged");
-            };
-            card.ondragend = () => {
-                card.classList.remove("dragged");
-                current = null;
-            };
-            card.ondragover = (e) => {
-                e.preventDefault();
+            for (let card of cards) {
+                const cardBuilder = htmlFactory(htmlTemplates.card);
+                const content = cardBuilder(card);
+                domManager.addChild(`.board-column-content[data-column-id="${card.status_id}"][data-board-id="${boardId}"]`, content)
+                if (card.user_id === userId) {
+                    domManager.addEventListener(
+                        `.card-remove[data-card-id="${card.id}"]`,
+                        "click",
+                        deleteButtonHandler
+                    );
+                    domManager.addEventListener(
+                        `.card-archive[data-card-id="${card.id}"]`,
+                        "click",
+                        archiveButtonHandler
+                    );
+                    domManager.addEventListener(
+                        `.card-title[data-card-board-id="${card.board_id}"][data-card-id="${card.id}"]`,
+                        "click",
+                        event => {
+                            renameCardTitle(event, card);
+                        }
+                    );
+                }
+            }
+        },
+        initDragAndDrop: function (boardId) {
+            let current = null;
+            let cards = document.querySelectorAll(`.card[data-card-board-id="${boardId}"]`);
+            for (let card of cards) {
+                card.ondragstart = () => {
+                    current = card;
+                    card.classList.add("dragged");
+                };
+                card.ondragend = () => {
+                    card.classList.remove("dragged");
+                    current = null;
+                };
+                card.ondragover = (e) => {
+                    e.preventDefault();
+                };
                 card.ondrop = async function (e) {
                     e.preventDefault();
                     if (card !== current) {
@@ -60,31 +61,45 @@ export let cardsManager = {
                         } else {
                             card.parentElement.insertBefore(current, card);
                         }
-                        const newCardData = updateCardData(current, card, cards);
+                        const newCardData = updateCardData(current, card.dataset.statusId, card.dataset.order, cards);
                         await dataHandler.updateCards(boardId, userId, newCardData);
                         socket.send('a');
                     }
-                };
+                }
             }
+            let columns = document.querySelectorAll(`.board-column-content[data-board-id="${boardId}"]`);
+            for (let column of columns) {
+                if (column.childNodes.length === 0) {
+                    column.ondragover = (e) => {
+                        e.preventDefault();
+                    };
+                    column.ondrop = async function () {
+                        column.appendChild(current);
+                        const newCardData = updateCardData(current, column.dataset.columnId, 1, cards);
+                        await dataHandler.updateCards(boardId, userId, newCardData);
+                        socket.send('a');
+                    }
+                }
+            }
+        },
+        createCard: function (cardTitle, boardId, statusId) {
+            dataHandler.createNewCard(cardTitle, boardId, statusId, userId)
+                .then(response => {
+                    flashList.innerHTML = '';
+                    flashList.innerHTML = `<li>${response.message}</li>`;
+                    showPopup(flashes);
+                })
+                .catch(err => console.log(err));
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => card.remove());
+            this.loadCards(boardId)
+                .then(() => {
+                    socket.send('a');
+                })
+                .catch(err => console.log(err));
         }
-    },
-    createCard: function (cardTitle, boardId, statusId) {
-        dataHandler.createNewCard(cardTitle, boardId, statusId, userId)
-            .then(response => {
-                flashList.innerHTML = '';
-                flashList.innerHTML = `<li>${response.message}</li>`;
-                showPopup(flashes);
-            })
-            .catch(err => console.log(err));
-        const cards = document.querySelectorAll('.card');
-        cards.forEach(card => card.remove());
-        this.loadCards(boardId)
-            .then(() => {
-                socket.send('a');
-            })
-            .catch(err => console.log(err));
     }
-};
+;
 
 function archiveButtonHandler(clickEvent) {
     const boardId = clickEvent.target.dataset.cardBoardId;
@@ -153,12 +168,10 @@ function renameCardTitle(event, card) {
     });
 }
 
-function updateCardData(current, dropZoneCard, cards) {
+function updateCardData(current, dropStatusId, dropOrder, cards) {
     let newCardData;
     let currentStatusId = current.dataset.statusId;
     let currentOrder = current.dataset.order;
-    let dropStatusId = dropZoneCard.dataset.statusId;
-    let dropOrder = dropZoneCard.dataset.order;
     current.dataset.order = dropOrder;
     current.dataset.statusId = dropStatusId;
     newCardData = [{'id': current.dataset.cardId, 'status_id': dropStatusId, 'card_order': dropOrder}]
