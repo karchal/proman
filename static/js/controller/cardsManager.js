@@ -176,7 +176,6 @@ function updateCardData(current, dropZoneCard, cards) {
     cards.forEach(c => {
         if ((currentStatusId === dropStatusId && currentOrder < dropOrder && c.dataset.order <= dropOrder ||
                 currentStatusId !== dropStatusId) &&
-            currentOrder < dropOrder &&
             c.dataset.statusId === currentStatusId &&
             c.dataset.order > currentOrder &&
             c !== current) {
