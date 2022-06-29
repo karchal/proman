@@ -16,7 +16,7 @@ export let cardsManager = {
             const cardBuilder = htmlFactory(htmlTemplates.card);
             const content = cardBuilder(card);
             domManager.addChild(`.board-column-content[data-column-id="${card.status_id}"][data-board-id="${boardId}"]`, content)
-            if (card.user_id === userId) {
+            if (card['user_id'] === userId) {
                 domManager.addEventListener(
                     `.card-remove[data-card-id="${card.id}"]`,
                     "click",
@@ -41,7 +41,7 @@ export let cardsManager = {
         let current = null;
         let cards = document.querySelectorAll(`.card[data-card-board-id="${boardId}"]`);
         for (let card of cards) {
-            card.ondragstart = (e) => {
+            card.ondragstart = () => {
                 current = card;
                 card.classList.add("dragged");
             };
