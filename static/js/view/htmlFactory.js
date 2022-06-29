@@ -41,14 +41,15 @@ function boardBuilder(board) {
 
 function cardBuilder(card) {
     let cardComponent = `<div class="card" data-card-id="${card.id}" data-card-board-id="${card.board_id}"`;
-    cardComponent += (card.user_id === userId) ? ` draggable="true"><div class="card-archive" data-card-id="${card.id}" data-card-board-id="${card.board_id}"><div class="tooltip"><span class="tooltiptext">Archive</span><i class="fa-solid fa-box-archive"></i></div></div><div class="card-remove" data-card-id="${card.id}" data-card-board-id="${card.board_id}"><div class="tooltip"><span class="tooltiptext">Remove</span><i class="fas fa-trash-alt" data-card-board-id="${card.board_id}"></i></div></div>` : ``;
+    cardComponent += (card.user_id === userId) ? ` draggable="true"><div class="card-archive" data-card-id="${card.id}" data-card-board-id="${card.board_id}"><div class="tooltip"><span class="tooltiptext">Archive</span><i class="fa-solid fa-box-archive"></i></div></div><div class="card-remove" data-card-id="${card.id}" data-card-board-id="${card.board_id}"><div class="tooltip"><span class="tooltiptext">Remove</span><i class="fas fa-trash-alt" data-card-id="${card.id}" data-card-board-id="${card.board_id}"></i></div></div>` : `>`;
     cardComponent += `<div class="card-title" data-card-board-id="${card.board_id}" data-card-id="${card.id}">${card.title}</div>`;
     return cardComponent;
 }
 
 function columnBuilder(column, boardId) {
     return `<div class="board-column" data-column-id="${column.id}" data-board-id="${boardId}">
-                <div class="board-column-title">${column.title}</div>
-                <div class="board-column-content" data-column-id="${column.id}" data-board-id="${boardId}"> </div>
+                <div class="board-column-title" data-column-id="${column.id}" data-board-id="${boardId}">${column.title}</div>
+                <div class="board-column-remove" data-column-id="${column.id}" data-board-id="${boardId}"><div class="tooltip"><span class="tooltiptext" data-column-id="${column.id}" data-board-id="${boardId}">Remove</span><i class="fa-solid fa-circle-xmark" data-column-id="${column.id}" data-board-id="${boardId}"></i></div></div>
+                <div class="board-column-content" data-column-id="${column.id}" data-board-id="${boardId}"></div>
             </div>`
 }
