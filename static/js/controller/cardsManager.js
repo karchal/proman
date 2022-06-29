@@ -37,7 +37,7 @@ export let cardsManager = {
             }
         }
     },
-    initDragAndDrop: function(boardId) {
+    initDragAndDrop: function (boardId) {
         let current = null;
         let cards = document.querySelectorAll(`.card[data-card-board-id="${boardId}"]`);
         for (let card of cards) {
@@ -51,17 +51,18 @@ export let cardsManager = {
             };
             card.ondragover = (e) => {
                 e.preventDefault();
-            card.ondrop = async function (e) {
-                e.preventDefault();
-                if (card !== current) {
-                    if (current.dataset.statusId === card.dataset.statusId &&
-                        current.dataset.order < card.dataset.order) {
-                        card.parentElement.insertBefore(current, card.nextSibling);
-                    } else {
-                        card.parentElement.insertBefore(current, card);
-                    }
-                    const newCardData = updateCardData(current, card, cards);
-                    await dataHandler.updateCards(boardId, userId, newCardData)
+                card.ondrop = async function (e) {
+                    e.preventDefault();
+                    if (card !== current) {
+                        if (current.dataset.statusId === card.dataset.statusId &&
+                            current.dataset.order < card.dataset.order) {
+                            card.parentElement.insertBefore(current, card.nextSibling);
+                        } else {
+                            card.parentElement.insertBefore(current, card);
+                        }
+                        const newCardData = updateCardData(current, card, cards);
+                        await dataHandler.updateCards(boardId, userId, newCardData);
+                        socket.send('a');
                     }
                 };
             }
@@ -160,7 +161,7 @@ function updateCardData(current, dropZoneCard, cards) {
     let dropOrder = dropZoneCard.dataset.order;
     current.dataset.order = dropOrder;
     current.dataset.statusId = dropStatusId;
-    newCardData = [{'id': current.dataset.cardId, 'status_id': dropStatusId, 'card_order': dropOrder }]
+    newCardData = [{'id': current.dataset.cardId, 'status_id': dropStatusId, 'card_order': dropOrder}]
     cards.forEach(c => {
         if ((currentStatusId === dropStatusId && currentOrder < dropOrder && c.dataset.order <= dropOrder ||
                 currentStatusId !== dropStatusId) &&

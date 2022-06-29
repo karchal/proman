@@ -163,11 +163,13 @@ function showHideArchivedButtonHandler(clickEvent) {
 async function loadBoardContent(boardId) {
     await columnsManager.loadColumns(boardId);
     await cardsManager.loadCards(boardId);
+    cardsManager.initDragAndDrop(boardId);
 }
 
 async function loadBoardContentArchived(boardId) {
     await columnsManager.loadColumns(boardId);
     await cardsManager.loadCards(boardId, true);
+    cardsManager.initDragAndDrop(boardId);
 }
 
 const saveNewBoardTitle = (submitEvent, event, board, newTitle, newTitleForm) => {
