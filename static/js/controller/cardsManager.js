@@ -36,7 +36,36 @@ export let cardsManager = {
                 );
             }
         }
-        initDragAndDrop(boardId, cards);
+    },
+    initDragAndDrop: function(boardId) {
+        let current = null;
+        let cards = document.querySelectorAll(`.card[data-card-board-id="${boardId}"]`);
+        for (let card of cards) {
+            card.ondragstart = (e) => {
+                current = card;
+                card.classList.add("dragged");
+            };
+            card.ondragend = () => {
+                card.classList.remove("dragged");
+                current = null;
+            };
+            card.ondragover = (e) => {
+                e.preventDefault();
+            card.ondrop = async function (e) {
+                e.preventDefault();
+                if (card !== current) {
+                    if (current.dataset.statusId === card.dataset.statusId &&
+                        current.dataset.order < card.dataset.order) {
+                        card.parentElement.insertBefore(current, card.nextSibling);
+                    } else {
+                        card.parentElement.insertBefore(current, card);
+                    }
+                    const newCardData = updateCardData(current, card, cards);
+                    await dataHandler.updateCards(boardId, userId, newCardData)
+                    }
+                };
+            }
+        }
     },
     createCard: function (cardTitle, boardId, statusId) {
         dataHandler.createNewCard(cardTitle, boardId, statusId, userId)
@@ -53,7 +82,7 @@ export let cardsManager = {
                 socket.send('a');
             })
             .catch(err => console.log(err));
-    },
+    }
 };
 
 function archiveButtonHandler(clickEvent) {
@@ -121,47 +150,6 @@ function renameCardTitle(event, card) {
         saveNewCardTitle(submitEvent, event, card, newTitle, newTitleForm);
         socket.send('a');
     });
-}
-
-function initDragAndDrop(boardId) {
-    let current = null;
-    let cards = document.querySelectorAll(`.card[data-card-board-id="${boardId}"]`);
-    for (let card of cards) {
-        card.ondragstart = (e) => {
-            current = card;
-            card.classList.add("dragged");
-        };
-        card.ondragend = () => {
-            card.classList.remove("dragged");
-            current = null;
-        };
-        /*card.ondragenter = () => {
-            if (card !== current) {
-                card.classList.add("drop-zone");
-            }
-        };*/
-        card.ondragover = (e) => {
-            e.preventDefault();
-        }/*
-        card.ondragleave = () => {
-            if (card !== current) {
-                card.classList.remove("drop-zone");
-            }
-        };*/
-        card.ondrop = async function(e) {
-            e.preventDefault();
-            if (card !== current) {
-                if (current.dataset.statusId === card.dataset.statusId &&
-                    current.dataset.order < card.dataset.order) {
-                    card.parentElement.insertBefore(current, card.nextSibling);
-                } else {
-                    card.parentElement.insertBefore(current, card);
-                }
-                const newCardData = updateCardData(current, card, cards);
-                await dataHandler.updateCards(boardId, userId, newCardData)
-            }
-        };
-    }
 }
 
 function updateCardData(current, dropZoneCard, cards) {
