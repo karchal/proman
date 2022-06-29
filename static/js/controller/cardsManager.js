@@ -108,19 +108,19 @@ function initDragAndDrop(boardId) {
             card.classList.remove("dragged");
             current = null;
         };
-        card.ondragenter = () => {
+        /*card.ondragenter = () => {
             if (card !== current) {
                 card.classList.add("drop-zone");
             }
-        };
+        };*/
         card.ondragover = (e) => {
             e.preventDefault();
-        }
+        }/*
         card.ondragleave = () => {
             if (card !== current) {
                 card.classList.remove("drop-zone");
             }
-        };
+        };*/
         card.ondrop = async function(e) {
             e.preventDefault();
             if (card !== current) {
@@ -147,41 +147,28 @@ function updateCardData(current, dropZoneCard, cards) {
     current.dataset.statusId = dropStatusId;
     newCardData = [{'id': current.dataset.cardId, 'status_id': dropStatusId, 'card_order': dropOrder }]
     cards.forEach(c => {
-        if (currentStatusId === dropStatusId &&
+        if ((currentStatusId === dropStatusId && currentOrder < dropOrder && c.dataset.order <= dropOrder ||
+                currentStatusId !== dropStatusId) &&
             currentOrder < dropOrder &&
             c.dataset.statusId === currentStatusId &&
             c.dataset.order > currentOrder &&
-            c.dataset.order <= dropOrder &&
             c !== current) {
             c.dataset.order = String(Number(c.dataset.order) - 1);
-            newCardData.push({'id': c.dataset.cardId,
-            'status_id': c.dataset.statusId,
-            'card_order': c.dataset.order })
-        } else if (currentStatusId === dropStatusId &&
-            c.dataset.statusId === currentStatusId &&
-            c.dataset.order < currentOrder &&
+            newCardData.push({
+                'id': c.dataset.cardId,
+                'status_id': c.dataset.statusId,
+                'card_order': c.dataset.order
+            })
+        } else if ((currentStatusId === dropStatusId && c.dataset.statusId === currentStatusId && c.dataset.order < currentOrder ||
+                currentStatusId !== dropStatusId && c.dataset.statusId === dropStatusId) &&
             c.dataset.order >= dropOrder &&
             c !== current) {
             c.dataset.order = String(Number(c.dataset.order) + 1);
-            newCardData.push({'id': c.dataset.cardId,
-            'status_id': c.dataset.statusId,
-            'card_order': c.dataset.order })
-        } else if (currentStatusId !== dropStatusId &&
-            c.dataset.statusId === currentStatusId &&
-            c.dataset.order > currentOrder &&
-            c !== current) {
-            c.dataset.order = String(Number(c.dataset.order) - 1);
-            newCardData.push({'id': c.dataset.cardId,
-            'status_id': c.dataset.statusId,
-            'card_order': c.dataset.order })
-        } else if (currentStatusId !== dropStatusId &&
-            c.dataset.statusId === dropStatusId &&
-            c.dataset.order >= dropOrder &&
-            c !== current) {
-            c.dataset.order = String(Number(c.dataset.order) + 1);
-            newCardData.push({'id': c.dataset.cardId,
-            'status_id': c.dataset.statusId,
-            'card_order': c.dataset.order })
+            newCardData.push({
+                'id': c.dataset.cardId,
+                'status_id': c.dataset.statusId,
+                'card_order': c.dataset.order
+            })
         }
     })
     console.log(newCardData);
