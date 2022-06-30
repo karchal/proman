@@ -87,15 +87,13 @@ def get_card(card_id, user_id):
 def archive_card(board_id, card_id, user_id):
     card = get_card(card_id, user_id)
     n = get_last_card_order(board_id, card['status_id'], not card['archived'])
-    print(n)
-    print(card)
-    archive = "TRUE" if card['archived'] is False else "FALSE"
+    archive = not card['archived']
     data_manager.execute_statement(
         """UPDATE cards
-        SET archived = """ + archive + """, card_order = %(last_order)s
+        SET archived = %(archive)s, card_order = %(last_order)s
         WHERE id = %(card_id)s AND board_id = %(board_id)s AND user_id = %(user_id)s""",
         variables={'card_id': card_id, 'board_id': board_id,
-                   'user_id': user_id, 'last_order': n})
+                   'user_id': user_id, 'last_order': n + 1, 'archive': archive})
 
 
 def get_user_by_username(username):
@@ -134,7 +132,7 @@ def add_new_board(board_title, public, user_id):
         VALUES(%(title)s, """ + public + ", %(user_id)s)", variables={'title': board_title, 'user_id': user_id})
 
 
-def get_last_card_order(board_id, status_id, archived):
+def get_last_card_order(board_id, status_id, archived=False):
     last_order_number = data_manager.execute_select(
         """SELECT card_order
         FROM cards
@@ -149,7 +147,7 @@ def get_last_card_order(board_id, status_id, archived):
 
 
 def create_new_card(board_id, card_details, user_id):
-    last_order_number = get_last_card_order(board_id, card_details['statusId'], False)
+    last_order_number = get_last_card_order(board_id, card_details['statusId'])
     data_manager.execute_statement(
         """
         INSERT INTO cards(board_id, status_id, title, card_order, user_id, archived)
