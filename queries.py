@@ -125,11 +125,11 @@ def add_new_user(new_user):
 
 
 def add_new_board(board_title, public, user_id):
-    public = 'TRUE' if public == 'public' else 'FALSE'
+    isPublic = (public == 'public')
     data_manager.execute_statement(
         """
         INSERT INTO boards (title, public, user_id)
-        VALUES(%(title)s, """ + public + ", %(user_id)s)", variables={'title': board_title, 'user_id': user_id})
+        VALUES(%(title)s, %(isPublic)s, %(user_id)s)""", variables={'title': board_title, 'user_id': user_id, 'isPublic': isPublic})
 
 
 def get_last_card_order(board_id, status_id, archived=False):
