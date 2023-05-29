@@ -1,1 +1,1 @@
-ProMan is a project management tool and is similar to Trello.
+ProMan is a project management tool similar to Trello.
